@@ -16,13 +16,24 @@ its title row, which shows the playlist as a QR code in place of the clip
 and text (qrcodegen.py, by Project Nayuki, MIT license).
 
 **The clip** plays through Blender's own FFmpeg. The movie is loaded as an
-image and each frame is asked for as it comes due: gl_free, then
-gl_load(frame=N), so that gpu.texture.from_image hands over frame N rather
-than the first. Measured in windows of Blender 5.2 and 4.2: frame for frame,
-under a millisecond a frame at 270 x 480, and 24 frames a second even with a
-heavy scene. It is drawn by draw.image_shader, which turns the image's
-scene-linear colors into the screen's, because Blender's IMAGE shader shows
-them too dark in 5.2.
+image, and each frame is asked for as it comes due (_load_frame): gl_load(frame=N)
+decodes frame N and makes it the image's current frame, and the image's
+pixels, which always show its current frame, are copied into a texture of the
+panel's own (_texture).
+
+Why not gpu.texture.from_image, which is what the clips first used: it takes
+no frame, and in Blender 5.3 it always fetches frame 0. Up to 5.2 an image
+had one GPU texture, which gl_load(frame=N) replaced, so from_image handed
+over frame N. From 5.3 each frame keeps its own texture, and from_image asks
+for frame 0's, so a clip stood still on its first frame while the player's
+frame count went on (a tester found it). Reading the pixels works the same in
+4.2 through 5.3. Measured at the clips' 720 x 1280: the decode is 2 to 20 ms
+a frame, as it was; the copy adds about 1.5 ms, and the texture 3 to 6 ms,
+made once per frame, in the draw.
+
+The pixels are the frame's colors as the screen shows them, so
+draw.image_shader is told so (`encoded`). An image (a still) still comes from
+from_image, in scene-linear colors, which the shader turns into the screen's.
 
 A step's clips and images play one after another, then round to the first;
 an image is held for its seconds. A step without any of its own shows the
@@ -50,6 +61,7 @@ import time
 import blf  # type: ignore
 import bpy  # type: ignore
 import gpu  # type: ignore
+import numpy as np  # type: ignore
 from gpu_extras.batch import batch_for_shader  # type: ignore
 
 from . import core, draw, errors, media, qrcodegen, reg, tutorials
@@ -94,7 +106,10 @@ IMAGE_NAME = ".Kneady Tutorial Clip"
 # the player: the clip's image, its path, frame count and rate, when it began,
 # whether it is held on its last frame
 P = {"image": None, "path": None, "key": None, "failed": None, "frames": 0, "fps": 30.0, "t0": 0.0,
-     "frame": 0, "paused": None, "still": False, "seconds": 4.0, "ended": False, "scrub": None}
+     "frame": 0, "paused": None, "still": False, "seconds": 4.0, "ended": False, "scrub": None,
+     # a clip's current frame: its pixels (_load_frame), counted each time
+     # they are read, and the texture made of them, with the count it was made at
+     "pixels": None, "read": 0, "tex": None, "tex_read": 0}
 HOVER = {"key": None, "at": None, "since": 0.0}  # since: when the mouse came onto the control
 # The clip enlarges under the mouse. Greg: "Could the video enlarge on hover?
 # It could overlap the text below but maybe hovering over it doubles it's size
@@ -502,7 +517,32 @@ def unload():
     img = _image()
     if img is not None:
         bpy.data.images.remove(img)
-    P.update(image=None, path=None, key=None, frames=0, frame=0, paused=None, ended=False, scrub=None)
+    P.update(image=None, path=None, key=None, frames=0, frame=0, paused=None, ended=False, scrub=None,
+             pixels=None, tex=None, tex_read=0)
+
+
+def _load_frame(img, frame):
+    """Make `frame` (counted from 1) the clip's current frame and copy its
+    pixels into P["pixels"], for _texture to show.
+
+    gl_load decodes the frame and makes it the image's current one, which is
+    the frame its pixels show (gl_free first lets go of the frame before, on
+    the graphics card). The GPU texture gl_load also makes goes unused: no
+    call that sets the current frame is cheaper, and gl_load is how the clips
+    have always been decoded."""
+    if bpy.app.background:
+        return                                   # no graphics card to draw with
+    img.gl_free()
+    img.gl_load(frame=frame)
+    w, h = img.size
+    n = w * h * img.channels
+    if img.channels != 4 or n == 0:
+        P["pixels"] = None                       # _texture falls back to from_image
+        return
+    if P["pixels"] is None or P["pixels"].size != n:
+        P["pixels"] = np.empty(n, dtype=np.float32)
+    img.pixels.foreach_get(P["pixels"])
+    P["read"] += 1
 
 
 def _loadable(path):
@@ -593,10 +633,8 @@ def _play_step():
         frame = min(max(int(P["scrub"]), 1), P["frames"])
         if frame != P["frame"]:
             P["frame"] = frame
-            if not bpy.app.background:
-                img.gl_free()
-                img.gl_load(frame=frame)
-                _redraw()
+            _load_frame(img, frame)
+            _redraw()
         return 0.03
     now = time.perf_counter()
     if not tutorials.S["playing"] or tutorials.S["qr"]:
@@ -635,10 +673,8 @@ def _play_step():
     frame = first + f
     if frame != P["frame"]:
         P["frame"] = frame
-        if not bpy.app.background:
-            img.gl_free()
-            img.gl_load(frame=frame)
-            _redraw()
+        _load_frame(img, frame)
+        _redraw()
     if P["ended"]:
         return 0.1
     return max(0.002, (f + 1) / P["fps"] - t + 0.0005)
@@ -893,21 +929,40 @@ def _check(x, y, s, color):
     _lines([(x - 4 * s, y + 4 * s), (x, y), (x, y), (x + 7 * s, y + 8 * s)], color, 2.0 * s)
 
 
+def _texture(img):
+    """(texture, encoded) for what shows: a clip's current frame, made from
+    its pixels (_load_frame) once per frame, its colors already the
+    screen's; or the image's own texture, in scene-linear colors - for an
+    image, and for a clip until its first frame is read (from_image's frame
+    0 is its first in every version).
+
+    Made here, in the draw, where Blender always has the graphics card
+    ready, and kept until the next frame is read, so a redraw for any other
+    reason, or the clip drawn again enlarged, costs nothing."""
+    if P["still"] or img.source != "MOVIE" or P["pixels"] is None:
+        return gpu.texture.from_image(img), False
+    if P["tex"] is None or P["tex_read"] != P["read"]:
+        w, h = img.size
+        data = gpu.types.Buffer("FLOAT", P["pixels"].size, P["pixels"])
+        P["tex"], P["tex_read"] = gpu.types.GPUTexture((w, h), format="RGBA16F", data=data), P["read"]
+    return P["tex"], True
+
+
 def _draw_picture(rect, s, img):
     """The clip's frame or the image, fitted into `rect`, and the pause sign
     while paused."""
     try:
-        tex = gpu.texture.from_image(img)
+        tex, encoded = _texture(img)
     except Exception:                   # no picture this frame, not no panel
         errors.caught("showing the clip or image %s" % img.name)
-        tex = None
+        tex, encoded = None, False
     if tex is not None:
         w, h = img.size if img.size[0] and img.size[1] else (9, 16)
         rw, rh = rect[2] - rect[0], rect[3] - rect[1]
         k = min(rw / w, rh / h)
         cx, cy = 0.5 * (rect[0] + rect[2]), 0.5 * (rect[1] + rect[3])
         x0, x1, y0, y1 = cx - 0.5 * w * k, cx + 0.5 * w * k, cy - 0.5 * h * k, cy + 0.5 * h * k
-        draw.draw_texture(tex, x0, y0, x1, y1)        # in the screen's colors (draw.image_shader)
+        draw.draw_texture(tex, x0, y0, x1, y1, encoded)   # in the screen's colors (draw.image_shader)
     if not tutorials.S["playing"]:
         # paused: two bars in the middle
         cx, cy = 0.5 * (rect[0] + rect[2]), 0.5 * (rect[1] + rect[3])

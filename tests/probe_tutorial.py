@@ -4,7 +4,8 @@
         --python tests/probe_tutorial.py
 
 First the demo tutorial (tests/tutorials/demo). The probe checks:
-- its clip plays frame by frame;
+- its clip plays frame by frame, the picture changing on screen in the
+  clip's own colors;
 - the arrow and a dot move between clips, and a click on the clip pauses it;
 - the mouse wheel over the text scrolls the text, not the view;
 - a click on the panel over an object never selects the object;
@@ -27,6 +28,7 @@ import sys
 import traceback
 
 import bpy  # type: ignore
+import numpy as np  # type: ignore
 from bpy_extras import view3d_utils  # type: ignore
 from mathutils import Vector  # type: ignore
 
@@ -53,6 +55,47 @@ def at(name, view):
     else:
         rect = rects[name]
     return int(view.x + 0.5 * (rect[0] + rect[2])), int(view.y + 0.5 * (rect[1] + rect[3]))
+
+
+SKIP = 0.15                        # the clip's lowest part, where its Hover to Expand hint shows
+
+
+def clip_on_screen(view):
+    """The clip's picture as the screen shows it: its pixels in a
+    screenshot (rows from the bottom, RGB, 0 to 1), less its lowest SKIP
+    and a 2-pixel edge."""
+    o = rigs.module("overlay")
+    win, area, _v, _r = w.view()
+    with bpy.context.temp_override(window=win, area=area, region=view):
+        rect = o.current_layout(bpy.context)["video"]
+    iw, ih = o._image().size
+    k = min((rect[2] - rect[0]) / iw, (rect[3] - rect[1]) / ih)       # fitted as overlay._draw_picture does
+    cx, cy = 0.5 * (rect[0] + rect[2]), 0.5 * (rect[1] + rect[3])
+    x0, x1, y0, y1 = cx - 0.5 * iw * k, cx + 0.5 * iw * k, cy - 0.5 * ih * k, cy + 0.5 * ih * k
+    y0 += SKIP * (y1 - y0)
+    os.makedirs(OUTPUT, exist_ok=True)
+    path = os.path.join(OUTPUT, "clip_on_screen.png")
+    with bpy.context.temp_override(window=win, area=area, region=view):
+        bpy.ops.screen.screenshot_area(filepath=path)
+    shot = bpy.data.images.load(path, check_existing=False)
+    sw, sh = shot.size
+    px = np.empty(sw * sh * 4, dtype=np.float32)
+    shot.pixels.foreach_get(px)
+    bpy.data.images.remove(shot)
+    fx, fy = sw / area.width, sh / area.height                       # the screenshot is the area's
+    ox, oy = view.x - area.x, view.y - area.y
+    rows = slice(int(fy * (oy + y0)) + 2, int(fy * (oy + y1)) - 2)
+    cols = slice(int(fx * (ox + x0)) + 2, int(fx * (ox + x1)) - 2)
+    return px.reshape(sh, sw, 4)[rows, cols, :3]
+
+
+def frame_colors(o):
+    """The mean color of the clip's current frame, as read from the movie,
+    over the part clip_on_screen looks at. None before a frame is read."""
+    if o.P["pixels"] is None:
+        return None
+    iw, ih = o._image().size
+    return o.P["pixels"].reshape(ih, iw, 4)[int(SKIP * ih):, :, :3].mean(axis=(0, 1))
 
 
 def press(win, view, name):
@@ -99,9 +142,23 @@ def steps():
     w.check("toolbar_hidden_while_it_shows", not area.spaces.active.show_region_toolbar)
     w.check("demo_start_applied", bpy.context.scene.kneady_on is False)
     first = o.P["frame"]
+    before = clip_on_screen(view)
     yield 0.6
     w.check("clip_plays", o.P["image"] is not None and o.P["frame"] != first,
             "frame %s then %s, image %s" % (first, o.P["frame"], o.P["image"]))
+    # The frame count is not the picture: in Blender 5.3 the count went on
+    # while the picture stood on the first frame. So the screen is looked at.
+    after = clip_on_screen(view)
+    moved = int((abs(after - before).sum(axis=2) > 0.02).sum())
+    w.check("clip_picture_changes_on_screen", moved > 100, "%d pixels changed" % moved)
+    # its colors: one frame held, so the screen and the frame read agree
+    o.show_frame(3)
+    yield 0.4
+    shown, frame = clip_on_screen(view).mean(axis=(0, 1)), frame_colors(o)
+    w.check("clip_colors_as_in_the_clip", frame is not None and abs(shown - frame).max() < 0.03,
+            "screen %s, clip %s" % (shown.round(3), None if frame is None else frame.round(3)))
+    o.show_frame(None)
+    yield 0.2
     w.shot("tutorial_1_demo")
     t.show_sidebar(area, "Kneady")
     yield 0.5

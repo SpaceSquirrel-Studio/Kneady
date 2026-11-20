@@ -600,11 +600,17 @@ def image_shader():
     clip's 40, 106, 205 showed as 13, 42, 154), and 4.2 has no converting
     shader of its own. This one encodes to sRGB unless the framebuffer does
     so as it writes (srgbTarget, which Blender sets), so it is right in
-    both."""
+    both.
+
+    A texture can also hold colors already encoded for the screen
+    (`encoded`): a tutorial clip's frame, made from the image's pixels
+    (overlay.py). Those pass straight through, or are decoded first where
+    the framebuffer encodes as it writes."""
     if not _IMAGE:
         info = gpu.types.GPUShaderCreateInfo()
         info.push_constant("MAT4", "ModelViewProjectionMatrix")
         info.push_constant("BOOL", "srgbTarget")
+        info.push_constant("BOOL", "encoded")
         info.sampler(0, "FLOAT_2D", "image")
         info.vertex_in(0, "VEC2", "pos")
         info.vertex_in(1, "VEC2", "texCoord")
@@ -617,7 +623,11 @@ def image_shader():
         info.fragment_source(
             "void main() {\n"
             "  vec4 c = texture(image, uv);\n"
-            "  if (!srgbTarget) {\n"
+            "  if (encoded && srgbTarget) {\n"
+            "    vec3 e = max(c.rgb, vec3(0.0));\n"
+            "    c.rgb = mix(e / 12.92, pow((e + 0.055) / 1.055, vec3(2.4)), step(vec3(0.04045), e));\n"
+            "  }\n"
+            "  else if (!encoded && !srgbTarget) {\n"
             "    vec3 l = max(c.rgb, vec3(0.0));\n"
             "    c.rgb = mix(l * 12.92, 1.055 * pow(l, vec3(1.0 / 2.4)) - 0.055, step(vec3(0.0031308), l));\n"
             "  }\n"
@@ -627,11 +637,13 @@ def image_shader():
     return _IMAGE[0][0]
 
 
-def draw_texture(texture, x0, y0, x1, y1):
-    """An image's texture over the rectangle, in the screen's colors."""
+def draw_texture(texture, x0, y0, x1, y1, encoded=False):
+    """An image's texture over the rectangle, in the screen's colors.
+    `encoded`: the texture's colors are the screen's already (image_shader)."""
     gpu.state.blend_set("ALPHA")
     shader = image_shader()
     shader.bind()
+    shader.uniform_bool("encoded", encoded)
     shader.uniform_sampler("image", texture)
     batch_for_shader(shader, "TRI_FAN", {"pos": ((x0, y0), (x1, y0), (x1, y1), (x0, y1)),
                                          "texCoord": ((0, 0), (1, 0), (1, 1), (0, 1))}).draw(shader)
