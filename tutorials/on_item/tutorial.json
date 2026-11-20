@@ -1,0 +1,185 @@
+{
+  "format": 1,
+  "title": "Buttons on the Item",
+  "summary": "Put a button on the item itself, drag it where it goes, watch it ride the pose, and see it from behind.",
+  "order": 8,
+  "practice": "../_scenes/arm_look.blend",
+  "steps": [
+    {
+      "title": "Step 1: Put Reach on the Forearm",
+      "text": [
+        "1. In the Kneady tab's tree, click Reach.",
+        "2. Click On Item.",
+        "3. Hover the forearm: Reach has left the column for the front of the forearm - faint where FK, in front of it, covers it.",
+        "",
+        "The arm is as The Look of Your Buttons left it. A button on the item sits at its own point on the surface and stays there as you orbit and pose; In Row puts it back in the column."
+      ],
+      "media": [
+        {
+          "file": "01_on_item.mp4",
+          "label": "In the Kneady tab",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "done_when": [
+        {
+          "path": "objects[\"Arm\"].kneady.regions[0].buttons[1].placed",
+          "is": true
+        },
+        {
+          "hovered": "Forearm",
+          "object": "Arm"
+        }
+      ],
+      "start": {
+        "mode": "OBJECT",
+        "select": [
+          "Arm"
+        ],
+        "active": "Arm",
+        "sidebar": "Kneady",
+        "view": {
+          "location": [
+            0.102,
+            0.031,
+            -0.02
+          ],
+          "rotation": [
+            0.71238,
+            0.44106,
+            0.28736,
+            0.46412
+          ],
+          "distance": 1.1,
+          "perspective": "PERSP"
+        },
+        "set": [
+          {
+            "path": "scene.kneady_on",
+            "value": true
+          },
+          {
+            "path": "scene.kneady_labels",
+            "value": "ALWAYS"
+          },
+          {
+            "path": "scene.kneady_highlight",
+            "value": "OUTLINE"
+          },
+          {
+            "path": "objects[\"Arm\"].kneady.regions[0].tree_open",
+            "value": true
+          },
+          {
+            "path": "window_manager.kneady_row",
+            "value": -1
+          },
+          {
+            "path": "window_manager.kneady_pick",
+            "value": false
+          }
+        ]
+      }
+    },
+    {
+      "title": "Step 2: Place It by the Wrist",
+      "text": [
+        "1. Click Viewport Edit, then Place on Surface under it.",
+        "2. Drag Reach onto the side of the forearm by the wrist, and let go.",
+        "3. Press Enter to keep it, then click Viewport Edit again to leave it.",
+        "",
+        "Place on Surface holds the region's buttons on screen while you drag them, and Blender's snapping works as it does for G. Dropped on the column, a button goes back into it; Esc puts everything back."
+      ],
+      "media": [
+        {
+          "file": "02_place.mp4",
+          "label": "In the Kneady tab, then on the forearm",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "highlight": [
+        "window_manager.kneady_pick"
+      ],
+      "done_when": [
+        {
+          "operator": "kneady.place_mode"
+        },
+        {
+          "path": "objects[\"Arm\"].kneady.regions[0].buttons[1].place",
+          "changed": true
+        },
+        {
+          "path": "window_manager.kneady_pick",
+          "is": false
+        }
+      ]
+    },
+    {
+      "title": "Step 3: It Rides the Arm",
+      "text": [
+        "1. Drag Reach: the hand moves the arm - and Reach stays on the forearm.",
+        "",
+        "A button on the item rides the bone that moves its part of the item, so it keeps its place on the surface however the arm is posed."
+      ],
+      "media": [
+        {
+          "file": "03_ride.mp4",
+          "label": "On the forearm",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "done_when": [
+        {
+          "operator": "kneady.drag",
+          "with": {
+            "target": "Arm",
+            "region": 1,
+            "button": 1
+          },
+          "moved": true
+        }
+      ]
+    },
+    {
+      "title": "Step 4: Seen From Behind",
+      "text": [
+        "1. Click Forearm in the tree, and set Behind to Ghost Behind.",
+        "2. Orbit round the arm - drag with the middle mouse button - until Reach's side faces away: Reach shows faint through it.",
+        "",
+        "Hide Behind, the default, hides a button on the item when its side faces away from you; Show Behind always shows it as it is. Behind is one setting for all of a region's buttons on the item."
+      ],
+      "media": [
+        {
+          "file": "04_behind.mp4",
+          "label": "In the Kneady tab, then in the view",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "highlight": [
+        "objects[\"Arm\"].kneady.regions[0].behind"
+      ],
+      "done_when": [
+        {
+          "path": "objects[\"Arm\"].kneady.regions[0].behind",
+          "is": "GHOST"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,215 @@
+{
+  "format": 1,
+  "title": "Viewport Edit",
+  "summary": "Edit buttons where you see them: pick one on the item, add one, rearrange the row, and remove a menu you don't need.",
+  "order": 10,
+  "practice": "../_scenes/mannequin_controls.blend",
+  "steps": [
+    {
+      "title": "Step 1: Pick a Button on the Item",
+      "text": [
+        "1. At the top of the Kneady tab, click Viewport Edit.",
+        "2. Click Nod on the mannequin's head.",
+        "",
+        "Nod's row is selected in the tree, under Head, and its settings show below it. In Viewport Edit a click on a button still does what it does - a toggle switches, a menu opens - and selects it too. Ctrl+click only selects it, and a click on a region's faces selects the region."
+      ],
+      "media": [
+        {
+          "file": "01_pick.mp4",
+          "label": "In the Kneady tab, then on the head",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "highlight": [
+        "window_manager.kneady_pick"
+      ],
+      "done_when": [
+        {
+          "path": "window_manager.kneady_pick",
+          "is": true
+        },
+        {
+          "path": "window_manager.kneady_row",
+          "is": 1
+        }
+      ],
+      "start": {
+        "mode": "OBJECT",
+        "select": [
+          "Mannequin"
+        ],
+        "active": "Mannequin",
+        "sidebar": "Kneady",
+        "view": {
+          "location": [
+            0.0,
+            0.0,
+            1.6
+          ],
+          "rotation": [
+            0.74324,
+            0.64609,
+            0.11392,
+            0.13105
+          ],
+          "distance": 1.6,
+          "perspective": "PERSP"
+        },
+        "set": [
+          {
+            "path": "scene.kneady_on",
+            "value": true
+          },
+          {
+            "path": "scene.kneady_labels",
+            "value": "ALWAYS"
+          },
+          {
+            "path": "scene.kneady_highlight",
+            "value": "OUTLINE"
+          },
+          {
+            "path": "objects[\"Mannequin\"].kneady.regions[0].tree_open",
+            "value": false
+          },
+          {
+            "path": "objects[\"Mannequin\"].kneady.regions[1].tree_open",
+            "value": false
+          },
+          {
+            "path": "window_manager.kneady_row",
+            "value": -1
+          },
+          {
+            "path": "window_manager.kneady_pick",
+            "value": false
+          },
+          {
+            "path": "window_manager.kneady_arrange",
+            "value": false
+          }
+        ]
+      }
+    },
+    {
+      "title": "Step 2: Add a Button",
+      "text": [
+        "1. Hover the head: icons sit out from the corners of the square round its buttons.",
+        "2. Click + at the top right. A new button joins the row, selected.",
+        "3. Double-click its name in the tree (or Ctrl+click it), type Tilt and press Enter.",
+        "",
+        "+ adds to the buttons showing - the row, or the menu that's open. Tilt drives nothing yet: Copy and Reuse, next, gives it Turn's commands."
+      ],
+      "media": [
+        {
+          "file": "02_add.mp4",
+          "label": "By the head, then in the tree",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "done_when": [
+        {
+          "path": "objects[\"Mannequin\"].kneady.regions[0].buttons[2].name",
+          "is": "Tilt"
+        },
+        {
+          "path": "objects[\"Mannequin\"].kneady.regions[0].button_count",
+          "is": 3
+        }
+      ],
+      "start": {
+        "set": [
+          {
+            "path": "window_manager.kneady_pick",
+            "value": true
+          }
+        ]
+      }
+    },
+    {
+      "title": "Step 3: Rearrange the Row",
+      "text": [
+        "1. Hover the head and click the grip of six dots at the top left. It turns blue: Rearrange is on.",
+        "2. Drag Tilt between Nod and Turn, and let go.",
+        "3. Click the grip again to turn Rearrange off.",
+        "",
+        "While Rearrange is on, a drag picks a button up instead of running it, and the others make room as it passes. The order is the tree's: Tilt is second there too."
+      ],
+      "media": [
+        {
+          "file": "03_arrange.mp4",
+          "label": "By the head",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "highlight": [
+        "window_manager.kneady_arrange"
+      ],
+      "done_when": [
+        {
+          "path": "objects[\"Mannequin\"].kneady.regions[0].buttons[1].name",
+          "is": "Tilt"
+        },
+        {
+          "path": "window_manager.kneady_arrange",
+          "is": false
+        }
+      ],
+      "start": {
+        "set": [
+          {
+            "path": "window_manager.kneady_pick",
+            "value": true
+          }
+        ]
+      }
+    },
+    {
+      "title": "Step 4: Remove a Menu",
+      "text": [
+        "1. Hover the chest. Spare is a menu left from an earlier layout, and nothing in it drives anything.",
+        "2. Ctrl+click Spare: it is selected, and its menu stays closed.",
+        "3. Click - beside +, then Remove.",
+        "",
+        "A click would have opened Spare's menu; Ctrl+click selects a button without doing what it does. - removes the button selected, and the buttons in its menu go with it, so Kneady asks first. Click Viewport Edit again when you're done."
+      ],
+      "media": [
+        {
+          "file": "04_remove.mp4",
+          "label": "On the chest",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "done_when": [
+        {
+          "path": "objects[\"Mannequin\"].kneady.regions[1].button_count",
+          "is": 2
+        }
+      ],
+      "start": {
+        "set": [
+          {
+            "path": "window_manager.kneady_pick",
+            "value": true
+          }
+        ]
+      }
+    }
+  ]
+}

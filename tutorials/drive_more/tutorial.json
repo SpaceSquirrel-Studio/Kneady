@@ -1,0 +1,253 @@
+{
+  "format": 1,
+  "title": "Drive More Than Bones",
+  "summary": "Make a button drive a shape key and a modifier input, two things at once, and switch between its two drags with Alt.",
+  "order": 3,
+  "practice": "../_scenes/shape_cube_region.blend",
+  "steps": [
+    {
+      "title": "Step 1: Round It with a Shape Key",
+      "text": [
+        "1. Under Up / Down, click Rotate X to open its command.",
+        "2. Set Drives to Property.",
+        "3. Click the Path field and pick the Sphere shape key.",
+        "",
+        "This cube is one region, with Button 1 picked for you. A property is any value Blender keeps: here the cube's Sphere shape key, which rounds it into a sphere."
+      ],
+      "media": [
+        {
+          "file": "01_shape_key.mp4",
+          "label": "In the Kneady tab",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "highlight": [
+        "objects[\"Cube\"].kneady.regions[0].buttons[0].up.kind"
+      ],
+      "done_when": [
+        {
+          "path": "objects[\"Cube\"].kneady.regions[0].buttons[0].up.kind",
+          "is": "PROPERTY"
+        },
+        {
+          "path": "objects[\"Cube\"].kneady.regions[0].buttons[0].up.data_path",
+          "is": "data.shape_keys.key_blocks[\"Sphere\"].value"
+        }
+      ],
+      "start": {
+        "mode": "OBJECT",
+        "select": [
+          "Cube"
+        ],
+        "active": "Cube",
+        "sidebar": "Kneady",
+        "view": {
+          "location": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation": [
+            0.71238,
+            0.44106,
+            0.28736,
+            0.46412
+          ],
+          "distance": 10.0,
+          "perspective": "PERSP"
+        },
+        "set": [
+          {
+            "path": "scene.kneady_on",
+            "value": true
+          },
+          {
+            "path": "objects[\"Cube\"].kneady.regions[0].tree_open",
+            "value": true
+          },
+          {
+            "path": "window_manager.kneady_row",
+            "value": 1
+          }
+        ]
+      }
+    },
+    {
+      "title": "Step 2: Twist It with a Modifier Input",
+      "text": [
+        "1. Under Left / Right, click Rotate Y to open its command.",
+        "2. Set Drives to Modifier Input.",
+        "3. Click the Input field and pick Twist.",
+        "",
+        "Twist is an input of the cube's Geometry Nodes modifier: it turns the cube's top against its bottom."
+      ],
+      "media": [
+        {
+          "file": "02_modifier_input.mp4",
+          "label": "In the Kneady tab",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "highlight": [
+        "objects[\"Cube\"].kneady.regions[0].buttons[0].across.kind"
+      ],
+      "done_when": [
+        {
+          "path": "objects[\"Cube\"].kneady.regions[0].buttons[0].across.kind",
+          "is": "INPUT"
+        },
+        {
+          "path": "objects[\"Cube\"].kneady.regions[0].buttons[0].across.input",
+          "is": "Twist"
+        }
+      ]
+    },
+    {
+      "title": "Step 3: Try It",
+      "text": [
+        "1. Drag the button up: the cube rounds into a sphere.",
+        "2. Drag it left and right: it twists.",
+        "",
+        "Ctrl+Z puts it back, a drag at a time."
+      ],
+      "media": [
+        {
+          "file": "03_try.mp4",
+          "label": "In the viewport",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "done_when": [
+        {
+          "path": "objects[\"Cube\"].data.shape_keys.key_blocks[\"Sphere\"].value",
+          "changed": true
+        },
+        {
+          "operator": "kneady.drag",
+          "with": {
+            "target": "Cube",
+            "region": 1,
+            "button": 0
+          },
+          "moved": true
+        }
+      ],
+      "start": {
+        "view": {
+          "location": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation": [
+            0.71238,
+            0.44106,
+            0.28736,
+            0.46412
+          ],
+          "distance": 10.0,
+          "perspective": "PERSP"
+        }
+      }
+    },
+    {
+      "title": "Step 4: Two Things at Once",
+      "text": [
+        "1. Under Up / Down, click Add Command.",
+        "2. Set the new command's Drives to Scale.",
+        "3. Click All.",
+        "",
+        "Every command of a drag moves together: dragging up now rounds the cube and grows it."
+      ],
+      "media": [
+        {
+          "file": "04_two_at_once.mp4",
+          "label": "In the Kneady tab",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "highlight": [
+        "objects[\"Cube\"].kneady.regions[0].buttons[0].up.more[0].kind"
+      ],
+      "done_when": [
+        {
+          "path": "objects[\"Cube\"].kneady.regions[0].buttons[0].up.more[0].kind",
+          "is": "SCALE"
+        },
+        {
+          "path": "objects[\"Cube\"].kneady.regions[0].buttons[0].up.more[0].axis",
+          "is": "ALL"
+        }
+      ]
+    },
+    {
+      "title": "Step 5: Switch with Alt",
+      "text": [
+        "1. Drag the button up: the cube rounds and grows.",
+        "2. Still holding the mouse button, press and hold Alt: the drag twists it instead.",
+        "3. Let go of Alt: it rounds again.",
+        "",
+        "Each drag keeps what the other did, so you can shape the cube in one go."
+      ],
+      "media": [
+        {
+          "file": "05_alt.mp4",
+          "label": "In the viewport",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "done_when": [
+        {
+          "path": "objects[\"Cube\"].data.shape_keys.key_blocks[\"Sphere\"].value",
+          "changed": true
+        },
+        {
+          "operator": "kneady.drag",
+          "with": {
+            "target": "Cube",
+            "region": 1,
+            "button": 0
+          },
+          "moved": true
+        }
+      ],
+      "start": {
+        "view": {
+          "location": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation": [
+            0.71238,
+            0.44106,
+            0.28736,
+            0.46412
+          ],
+          "distance": 10.0,
+          "perspective": "PERSP"
+        }
+      }
+    }
+  ]
+}

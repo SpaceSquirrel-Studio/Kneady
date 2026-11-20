@@ -1,0 +1,202 @@
+{
+  "format": 1,
+  "title": "Menus in Use",
+  "summary": "Drag a menu's buttons, pin a menu open, make one stay open, and put a menu inside a menu.",
+  "order": 5,
+  "practice": "../_scenes/shape_cube_menu.blend",
+  "steps": [
+    {
+      "title": "Step 1: Drag in the Menu",
+      "text": [
+        "1. Click Button 1 on the cube: its menu opens.",
+        "2. Drag Round up and down: the cube rounds.",
+        "3. Drag Twist left and right: it twists.",
+        "",
+        "Round and Twist were given their drags for you. Moving the mouse off the cube closes the menu."
+      ],
+      "media": [
+        {
+          "file": "01_haul.mp4",
+          "label": "In the viewport",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "done_when": [
+        {
+          "operator": "kneady.drag",
+          "with": {
+            "target": "Cube",
+            "region": 1,
+            "button": 1
+          },
+          "moved": true
+        },
+        {
+          "operator": "kneady.drag",
+          "with": {
+            "target": "Cube",
+            "region": 1,
+            "button": 2
+          },
+          "moved": true
+        }
+      ],
+      "start": {
+        "mode": "OBJECT",
+        "select": [
+          "Cube"
+        ],
+        "active": "Cube",
+        "sidebar": "Kneady",
+        "view": {
+          "location": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation": [
+            0.71238,
+            0.44106,
+            0.28736,
+            0.46412
+          ],
+          "distance": 10.0,
+          "perspective": "PERSP"
+        },
+        "set": [
+          {
+            "path": "scene.kneady_on",
+            "value": true
+          },
+          {
+            "path": "objects[\"Cube\"].kneady.regions[0].tree_open",
+            "value": false
+          },
+          {
+            "path": "window_manager.kneady_row",
+            "value": -1
+          }
+        ]
+      }
+    },
+    {
+      "title": "Step 2: Pin It with Shift",
+      "text": [
+        "1. Hold Shift and click Button 1: its menu opens, pinned.",
+        "2. Move the mouse off the cube: the menu stays, and you can still drag its buttons.",
+        "3. Press Esc to close it.",
+        "",
+        "A pinned menu stays wherever the mouse goes. Shift+click Button 1 again also unpins it."
+      ],
+      "media": [
+        {
+          "file": "02_pin.mp4",
+          "label": "In the viewport",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "done_when": [
+        {
+          "operator": "kneady.close_menu"
+        }
+      ],
+      "start": {
+        "view": {
+          "location": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation": [
+            0.71238,
+            0.44106,
+            0.28736,
+            0.46412
+          ],
+          "distance": 10.0,
+          "perspective": "PERSP"
+        }
+      }
+    },
+    {
+      "title": "Step 3: Make It Stay Open",
+      "text": [
+        "1. In the Kneady tab, click the arrow beside Region 1, then click Button 1.",
+        "2. Under Opens Menu, turn on Stays Open.",
+        "3. Click Button 1 on the cube: its menu opens and stays, no Shift needed.",
+        "4. Click in empty space to close it.",
+        "",
+        "Stays Open is for a menu you use a lot: one click keeps it up."
+      ],
+      "media": [
+        {
+          "file": "03_stays_open.mp4",
+          "label": "In the Kneady tab",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "highlight": [
+        "objects[\"Cube\"].kneady.regions[0].buttons[0].menu_stays"
+      ],
+      "done_when": [
+        {
+          "path": "objects[\"Cube\"].kneady.regions[0].buttons[0].menu_stays",
+          "is": true
+        },
+        {
+          "operator": "kneady.click_off"
+        }
+      ]
+    },
+    {
+      "title": "Step 4: A Menu Inside a Menu",
+      "text": [
+        "1. Click Twist in the tree, under Button 1.",
+        "2. Turn on its Opens Menu, and press Add to Its Menu.",
+        "3. Click Button 1 on the cube, then click Twist: Twist's own menu opens, with its new button.",
+        "4. Click Twist again to go back, and press Esc to close.",
+        "",
+        "A button in a menu can open one more menu. A drag on Twist still twists the cube."
+      ],
+      "media": [
+        {
+          "file": "04_sub_menu.mp4",
+          "label": "In the Kneady tab",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "highlight": [
+        "objects[\"Cube\"].kneady.regions[0].buttons[2].opens_menu"
+      ],
+      "done_when": [
+        {
+          "path": "objects[\"Cube\"].kneady.regions[0].buttons[2].opens_menu",
+          "is": true
+        },
+        {
+          "path": "objects[\"Cube\"].kneady.regions[0].button_count",
+          "at_least": 4
+        },
+        {
+          "operator": "kneady.close_menu"
+        }
+      ]
+    }
+  ]
+}

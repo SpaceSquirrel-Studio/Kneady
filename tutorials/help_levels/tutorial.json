@@ -1,0 +1,152 @@
+{
+  "format": 1,
+  "title": "Learn, Inform and Quiet",
+  "summary": "Choose how much Kneady tells you: Learn's tutorials and complete tips, Inform's shorter tips, or Quiet.",
+  "order": 0,
+  "practice": "../_scenes/cube_region.blend",
+  "steps": [
+    {
+      "title": "Step 1: Learn Shows Everything",
+      "text": [
+        "1. Rest the mouse on the button on the cube's top. After half a second, its tip shows under its name, listing every key: each drag, Ctrl, Shift, Shift+Click.",
+        "",
+        "That's Learn, where Kneady starts: complete tips, and the tutorials offered at the top of the Kneady tab. The cube's control is one you'll make in Quick Start."
+      ],
+      "media": [
+        {
+          "file": "01_learn.mp4",
+          "label": "On the cube, then in the Kneady tab",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "highlight": [
+        "window_manager.kneady_help"
+      ],
+      "done_when": [
+        {
+          "hovered": "Region 1",
+          "object": "Cube"
+        }
+      ],
+      "start": {
+        "mode": "OBJECT",
+        "select": [
+          "Cube"
+        ],
+        "active": "Cube",
+        "sidebar": "Kneady",
+        "view": {
+          "location": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation": [
+            0.71238,
+            0.44106,
+            0.28736,
+            0.46412
+          ],
+          "distance": 10.0,
+          "perspective": "PERSP"
+        },
+        "set": [
+          {
+            "path": "scene.kneady_on",
+            "value": true
+          }
+        ]
+      }
+    },
+    {
+      "title": "Step 2: Inform Says Less",
+      "text": [
+        "1. In the Kneady tab, Help says Learn. Set it to Inform.",
+        "2. Rest the mouse on the cube's button: its tip shows only what each drag does. Start a Tutorial is gone from the top of the tab.",
+        "",
+        "Inform is for when you know your way around: the keys every button shares are left to the status bar, at the foot of the window. The tab offers no tutorials - this one keeps playing - but a file that comes with its own still shows them, as Tutorials in This File."
+      ],
+      "media": [
+        {
+          "file": "02_inform.mp4",
+          "label": "In the Kneady tab, then on the cube",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "highlight": [
+        "window_manager.kneady_help"
+      ],
+      "done_when": [
+        {
+          "path": "window_manager.kneady_help",
+          "is": "INFORM"
+        }
+      ]
+    },
+    {
+      "title": "Step 3: Quiet Says Least",
+      "text": [
+        "1. Set Help to Quiet.",
+        "2. Rest the mouse on the cube's button: its name shows, and no tip.",
+        "",
+        "Quiet keeps out of the way: the buttons' names and the status bar, nothing more. Every button works just as before."
+      ],
+      "media": [
+        {
+          "file": "03_quiet.mp4",
+          "label": "In the Kneady tab, then on the cube",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "highlight": [
+        "window_manager.kneady_help"
+      ],
+      "done_when": [
+        {
+          "path": "window_manager.kneady_help",
+          "is": "QUIET"
+        }
+      ]
+    },
+    {
+      "title": "Step 4: Back to Learn",
+      "text": [
+        "1. Set Help back to Learn: Start a Tutorial is back.",
+        "",
+        "Help is yours, not the file's: it stays as you leave it in every file you open, until you change it. Keep Learn for the tutorials - next is 1. Quick Start - and choose Inform or Quiet when you're done with them."
+      ],
+      "media": [
+        {
+          "file": "04_learn.mp4",
+          "label": "In the Kneady tab",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "highlight": [
+        "window_manager.kneady_help"
+      ],
+      "done_when": [
+        {
+          "path": "window_manager.kneady_help",
+          "is": "LEARN"
+        }
+      ]
+    }
+  ]
+}

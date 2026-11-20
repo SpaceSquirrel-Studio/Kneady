@@ -1,0 +1,287 @@
+{
+  "format": 1,
+  "title": "Toggles and Show When",
+  "summary": "Make a toggle that switches an arm between IK and FK, and buttons that show only in the mode they work in.",
+  "order": 6,
+  "practice": "../_scenes/arm_forearm.blend",
+  "steps": [
+    {
+      "title": "Step 1: Add a Toggle",
+      "text": [
+        "1. In the Kneady tab, click Forearm in the tree.",
+        "2. Press + to add a button. Name it FK: Ctrl+click its name, type FK and press Enter.",
+        "3. In its settings, click Toggle.",
+        "",
+        "This arm is rigged with Rigify. Its Forearm region has two buttons: Bend turns the forearm in FK, Reach moves the hand in IK. The arm starts in IK, so only Reach works yet."
+      ],
+      "media": [
+        {
+          "file": "01_add.mp4",
+          "label": "In the Kneady tab",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "highlight": [
+        "objects[\"Arm\"].kneady.regions[0].buttons[2].action"
+      ],
+      "done_when": [
+        {
+          "path": "objects[\"Arm\"].kneady.regions[0].buttons[2].name",
+          "is": "FK"
+        },
+        {
+          "path": "objects[\"Arm\"].kneady.regions[0].buttons[2].action",
+          "is": "TOGGLE"
+        }
+      ],
+      "start": {
+        "mode": "OBJECT",
+        "select": [
+          "Arm"
+        ],
+        "active": "Arm",
+        "sidebar": "Kneady",
+        "view": {
+          "location": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation": [
+            0.71238,
+            0.44106,
+            0.28736,
+            0.46412
+          ],
+          "distance": 2.4,
+          "perspective": "PERSP"
+        },
+        "set": [
+          {
+            "path": "scene.kneady_on",
+            "value": true
+          },
+          {
+            "path": "objects[\"Arm\"].kneady.regions[0].tree_open",
+            "value": false
+          },
+          {
+            "path": "window_manager.kneady_row",
+            "value": -1
+          }
+        ]
+      }
+    },
+    {
+      "title": "Step 2: Point It at the Switch",
+      "text": [
+        "1. Under Click Switches, click the arrow beside the Path field to open its command.",
+        "2. Turn off Deform Hovered Object. Click Target, type Rig and press Enter.",
+        "3. Click the Path field, type IK_FK, and click IK_FK in the list.",
+        "",
+        "IK_FK is Rigify's switch for this arm: 1 is FK, 0 is IK. A toggle sets it to 1 when it's on, 0 when it's off."
+      ],
+      "media": [
+        {
+          "file": "02_switch.mp4",
+          "label": "In the Kneady tab",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "highlight": [
+        "objects[\"Arm\"].kneady.regions[0].buttons[2].switch.target",
+        "objects[\"Arm\"].kneady.regions[0].buttons[2].switch.data_path"
+      ],
+      "done_when": [
+        {
+          "path": "objects[\"Arm\"].kneady.regions[0].buttons[2].switch.target",
+          "is": "Rig"
+        },
+        {
+          "path": "objects[\"Arm\"].kneady.regions[0].buttons[2].switch.data_path",
+          "is": "pose.bones[\"upper_arm_parent.L\"][\"IK_FK\"]"
+        }
+      ]
+    },
+    {
+      "title": "Step 3: Switch It",
+      "text": [
+        "1. Hover the forearm and click FK: the arm switches to FK, and FK lights up.",
+        "2. Click it again: back to IK."
+      ],
+      "media": [
+        {
+          "file": "03_click.mp4",
+          "label": "In the viewport",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "done_when": [
+        {
+          "operator": "kneady.drag",
+          "with": {
+            "target": "Arm",
+            "region": 1,
+            "button": 2
+          },
+          "moved": false
+        }
+      ],
+      "start": {
+        "view": {
+          "location": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation": [
+            0.71238,
+            0.44106,
+            0.28736,
+            0.46412
+          ],
+          "distance": 2.4,
+          "perspective": "PERSP"
+        }
+      }
+    },
+    {
+      "title": "Step 4: Bend in FK Only",
+      "text": [
+        "1. Click Bend in the tree.",
+        "2. Set Show to While On.",
+        "3. Click the field beside it, type FK and click FK in the list.",
+        "",
+        "Bend now shows only while FK is on."
+      ],
+      "media": [
+        {
+          "file": "04_bend_on.mp4",
+          "label": "In the Kneady tab",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "highlight": [
+        "objects[\"Arm\"].kneady.regions[0].buttons[0].show_when",
+        "objects[\"Arm\"].kneady.regions[0].buttons[0].when_toggle"
+      ],
+      "done_when": [
+        {
+          "path": "objects[\"Arm\"].kneady.regions[0].buttons[0].show_when",
+          "is": "ON"
+        },
+        {
+          "path": "objects[\"Arm\"].kneady.regions[0].buttons[0].when_toggle",
+          "is": "FK"
+        }
+      ]
+    },
+    {
+      "title": "Step 5: Reach in IK Only",
+      "text": [
+        "1. Click Reach in the tree.",
+        "2. Set Show to While Off. Click the field beside it, type FK and click FK in the list.",
+        "",
+        "Reach now shows only while FK is off: in IK."
+      ],
+      "media": [
+        {
+          "file": "05_reach_off.mp4",
+          "label": "In the Kneady tab",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "highlight": [
+        "objects[\"Arm\"].kneady.regions[0].buttons[1].show_when",
+        "objects[\"Arm\"].kneady.regions[0].buttons[1].when_toggle"
+      ],
+      "done_when": [
+        {
+          "path": "objects[\"Arm\"].kneady.regions[0].buttons[1].show_when",
+          "is": "OFF"
+        },
+        {
+          "path": "objects[\"Arm\"].kneady.regions[0].buttons[1].when_toggle",
+          "is": "FK"
+        }
+      ]
+    },
+    {
+      "title": "Step 6: Try It",
+      "text": [
+        "1. Hover the forearm: Reach shows. Drag it: the hand moves, the arm following.",
+        "2. Click FK: Bend shows in Reach's place. Drag it up: the elbow bends.",
+        "",
+        "One region, two sets of controls, each showing when it works."
+      ],
+      "media": [
+        {
+          "file": "06_try.mp4",
+          "label": "In the viewport",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "done_when": [
+        {
+          "operator": "kneady.drag",
+          "with": {
+            "target": "Arm",
+            "region": 1,
+            "button": 1
+          },
+          "moved": true
+        },
+        {
+          "operator": "kneady.drag",
+          "with": {
+            "target": "Arm",
+            "region": 1,
+            "button": 0
+          },
+          "moved": true
+        }
+      ],
+      "start": {
+        "view": {
+          "location": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation": [
+            0.71238,
+            0.44106,
+            0.28736,
+            0.46412
+          ],
+          "distance": 2.4,
+          "perspective": "PERSP"
+        }
+      }
+    }
+  ]
+}

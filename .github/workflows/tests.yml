@@ -1,0 +1,72 @@
+# Kneady's tests on every push and pull request, in Blender 4.2 LTS (the
+# oldest Kneady supports) and the newest release. They run in the background,
+# so they cover everything but what needs a window (tests/probe_*.py), which
+# is run by hand before a release.
+#
+# Two things they do without, on purpose:
+# - The tutorial clips, kept in Git LFS. The tests check that each clip is
+#   there, never what is in it (run once with every clip replaced by its LFS
+#   pointer: all pass), so the checkout skips LFS and spends none of the
+#   repository's LFS bandwidth.
+# - The test characters (Rain, MPFB2, Mixamo, Auto-Rig Pro), which can't be
+#   published here. Each test that needs one says SKIP and passes.
+#
+# To test another Blender, add its version to the matrix: the newest patch of
+# it is found on download.blender.org and kept in the cache.
+
+name: Tests
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  tests:
+    name: Blender ${{ matrix.blender }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        blender: ["4.2", "5.3"]
+    steps:
+      - name: Check out Kneady (without the clips in LFS)
+        uses: actions/checkout@v4
+        with:
+          lfs: false
+          # the tests import the add-on by its folder's name
+          path: Kneady
+
+      - name: Find the newest Blender ${{ matrix.blender }}
+        id: blender
+        run: |
+          v="${{ matrix.blender }}"
+          escaped="${v//./\\.}"
+          patch=$(curl -fsSL "https://download.blender.org/release/Blender$v/" \
+            | grep -oE "blender-$escaped\.[0-9]+-linux-x64\.tar\.xz" \
+            | sed -E "s/blender-$escaped\.([0-9]+)-.*/\1/" | sort -n | tail -1)
+          if [ -z "$patch" ]; then echo "No Linux download for Blender $v"; exit 1; fi
+          echo "name=blender-$v.$patch-linux-x64" >> "$GITHUB_OUTPUT"
+          echo "url=https://download.blender.org/release/Blender$v/blender-$v.$patch-linux-x64.tar.xz" >> "$GITHUB_OUTPUT"
+
+      - name: Keep Blender between runs
+        uses: actions/cache@v4
+        with:
+          path: ~/blender
+          key: ${{ steps.blender.outputs.name }}
+
+      - name: Download Blender
+        run: |
+          if [ ! -x ~/blender/blender ]; then
+            mkdir -p ~/blender
+            curl -fsSL "${{ steps.blender.outputs.url }}" | tar -xJ -C ~/blender --strip-components=1
+          fi
+
+      - name: Install the libraries Blender loads
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libxi6 libxxf86vm1 libxfixes3 libxrender1 libgl1 libegl1 libxkbcommon0 libsm6
+
+      - name: Run the tests
+        working-directory: Kneady
+        run: ~/blender/blender --background --factory-startup --python tests/run.py

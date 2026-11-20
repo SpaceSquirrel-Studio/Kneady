@@ -1,0 +1,53 @@
+schema_version = "1.0.0"
+
+id = "kneady"
+version = "1.0.0"
+name = "Kneady Controls"
+tagline = "Pose and shape anything by dragging its own surface"
+maintainer = "Greg Brown"
+type = "add-on"
+
+website = "https://github.com/SpaceSquirrel-Studio/Kneady"
+
+tags = ["Animation", "Rigging", "3D View"]
+
+# 4.2 LTS, where the extensions system began. The tests and the window checks
+# (real drags, drawing, the panel) pass in 4.2.23, 4.5.15, 5.2 and 5.3.0.
+blender_version_min = "4.2.0"
+
+license = [
+  "SPDX:GPL-3.0-or-later",
+]
+copyright = [
+  "2026 Greg Brown",
+]
+
+# What it needs beyond Blender itself: Copy and Paste put buttons on the system
+# clipboard as text, so they go between files; Help keeps how much Kneady says
+# in a small file in Blender's config folder, so it is the same in every file,
+# and a tutorial opens a copy of its practice scene from the temporary folder,
+# so the one it ships with is never changed. Kneady's own tutorials ship their
+# clips and images inside the extension; a tutorial may keep some online, and
+# those are downloaded when it is played, only while Blender's Allow Online
+# Access is on.
+[permissions]
+clipboard = "Copy and paste buttons between regions and files"
+files = "Keep your Help level, and copy tutorial practice scenes to open"
+network = "Download tutorial clips"
+
+# Files the build leaves out: the tests and development notes are for the
+# repository, not the extension people install.
+[build]
+paths_exclude_pattern = [
+  "__pycache__/",
+  "/.git/",
+  "/.github/",
+  "/tests/",
+  "/dev/",
+  "/docs/",
+  ".gitignore",
+  ".gitattributes",
+  "*.blend1",
+  "/tutorials/.hosted/",
+  "Autosaves/",
+]

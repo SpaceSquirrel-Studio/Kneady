@@ -1,0 +1,217 @@
+{
+  "format": 1,
+  "title": "The Look of Your Buttons",
+  "summary": "Line buttons up, show their names, make them text or square, and outline a region instead of filling it.",
+  "order": 7,
+  "practice": "../_scenes/arm_toggle.blend",
+  "steps": [
+    {
+      "title": "Step 1: Line Them Up",
+      "text": [
+        "1. In the Kneady tab, click Forearm in the tree.",
+        "2. Under Its Buttons, click Column.",
+        "3. Hover the forearm: its buttons stand one above the other.",
+        "",
+        "The arm is as Toggles and Show When left it: FK switches it, and Bend or Reach shows. Row, Column, Row + Column and Circle line a region's buttons up in its middle."
+      ],
+      "media": [
+        {
+          "file": "01_column.mp4",
+          "label": "In the Kneady tab",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "highlight": [
+        "objects[\"Arm\"].kneady.regions[0].arrange"
+      ],
+      "done_when": [
+        {
+          "path": "objects[\"Arm\"].kneady.regions[0].arrange",
+          "is": "COLUMN"
+        },
+        {
+          "hovered": "Forearm",
+          "object": "Arm"
+        }
+      ],
+      "start": {
+        "mode": "OBJECT",
+        "select": [
+          "Arm"
+        ],
+        "active": "Arm",
+        "sidebar": "Kneady",
+        "view": {
+          "location": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation": [
+            0.71238,
+            0.44106,
+            0.28736,
+            0.46412
+          ],
+          "distance": 2.4,
+          "perspective": "PERSP"
+        },
+        "set": [
+          {
+            "path": "scene.kneady_on",
+            "value": true
+          },
+          {
+            "path": "scene.kneady_labels",
+            "value": "HOVER"
+          },
+          {
+            "path": "scene.kneady_highlight",
+            "value": "FILL"
+          },
+          {
+            "path": "objects[\"Arm\"].kneady.regions[0].tree_open",
+            "value": false
+          },
+          {
+            "path": "window_manager.kneady_row",
+            "value": -1
+          }
+        ]
+      }
+    },
+    {
+      "title": "Step 2: Show Their Names",
+      "text": [
+        "1. At the top of the Kneady tab, set Labels to Always.",
+        "2. Hover the forearm: every button's name shows.",
+        "",
+        "On Hover shows the name of the button under the mouse only; Off shows none. This setting is for all of Kneady."
+      ],
+      "media": [
+        {
+          "file": "02_labels.mp4",
+          "label": "In the Kneady tab",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "highlight": [
+        "scene.kneady_labels"
+      ],
+      "done_when": [
+        {
+          "path": "scene.kneady_labels",
+          "is": "ALWAYS"
+        },
+        {
+          "hovered": "Forearm",
+          "object": "Arm"
+        }
+      ]
+    },
+    {
+      "title": "Step 3: A Text Button",
+      "text": [
+        "1. Click the arrow beside Forearm in the tree, then click FK.",
+        "2. Set its Icon to Text.",
+        "",
+        "A text button shows its name in its box, instead of arrows: good for a switch."
+      ],
+      "media": [
+        {
+          "file": "03_text.mp4",
+          "label": "In the Kneady tab",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "highlight": [
+        "objects[\"Arm\"].kneady.regions[0].buttons[2].icon_type"
+      ],
+      "done_when": [
+        {
+          "path": "objects[\"Arm\"].kneady.regions[0].buttons[2].icon_type",
+          "is": "TEXT"
+        }
+      ]
+    },
+    {
+      "title": "Step 4: Square Buttons",
+      "text": [
+        "1. Click Bend in the tree, and click Square.",
+        "2. Do the same for Reach.",
+        "",
+        "A shape tells kinds of button apart at a glance: here the drag buttons are square, and the switch is text."
+      ],
+      "media": [
+        {
+          "file": "04_square.mp4",
+          "label": "In the Kneady tab",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "highlight": [
+        "objects[\"Arm\"].kneady.regions[0].buttons[0].shape",
+        "objects[\"Arm\"].kneady.regions[0].buttons[1].shape"
+      ],
+      "done_when": [
+        {
+          "path": "objects[\"Arm\"].kneady.regions[0].buttons[0].shape",
+          "is": "SQUARE"
+        },
+        {
+          "path": "objects[\"Arm\"].kneady.regions[0].buttons[1].shape",
+          "is": "SQUARE"
+        }
+      ]
+    },
+    {
+      "title": "Step 5: Outline Instead of Fill",
+      "text": [
+        "1. At the top of the Kneady tab, set Highlight to Outline.",
+        "2. Hover the forearm: the region shows as its outline, in its color.",
+        "",
+        "Outline keeps the mesh in view while you work. Outline Width, under it, sets how thick it is."
+      ],
+      "media": [
+        {
+          "file": "05_outline.mp4",
+          "label": "In the Kneady tab",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "highlight": [
+        "scene.kneady_highlight"
+      ],
+      "done_when": [
+        {
+          "path": "scene.kneady_highlight",
+          "is": "OUTLINE"
+        },
+        {
+          "hovered": "Forearm",
+          "object": "Arm"
+        }
+      ]
+    }
+  ]
+}

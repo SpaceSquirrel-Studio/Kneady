@@ -1,0 +1,221 @@
+{
+  "format": 1,
+  "title": "3D Handles",
+  "summary": "Turn a button on the item into a 3D handle: an arrow each way it moves, a ring for a turn, and a drag along it.",
+  "order": 9,
+  "practice": "../_scenes/arm_on_item.blend",
+  "steps": [
+    {
+      "title": "Step 1: Reach as a Handle",
+      "text": [
+        "1. In the Kneady tab's tree, click Reach.",
+        "2. Click 3D Handle.",
+        "3. Hover the forearm: Reach is an arrow on the forearm now, pointing the way its Up / Down moves the hand.",
+        "",
+        "The arm is as Buttons on the Item left it. A 3D handle keeps its direction in the scene as you orbit, and a drag goes along it. It points along what it drives: a Move's axis, or the way a Rotate turns."
+      ],
+      "media": [
+        {
+          "file": "01_handle.mp4",
+          "label": "In the Kneady tab",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "done_when": [
+        {
+          "path": "objects[\"Arm\"].kneady.regions[0].buttons[1].handle",
+          "is": "HANDLE"
+        },
+        {
+          "hovered": "Forearm",
+          "object": "Arm"
+        }
+      ],
+      "start": {
+        "mode": "OBJECT",
+        "select": [
+          "Arm"
+        ],
+        "active": "Arm",
+        "sidebar": "Kneady",
+        "view": {
+          "location": [
+            0.102,
+            0.031,
+            -0.02
+          ],
+          "rotation": [
+            0.71238,
+            0.44106,
+            0.28736,
+            0.46412
+          ],
+          "distance": 0.8,
+          "perspective": "PERSP"
+        },
+        "set": [
+          {
+            "path": "scene.kneady_on",
+            "value": true
+          },
+          {
+            "path": "scene.kneady_labels",
+            "value": "ALWAYS"
+          },
+          {
+            "path": "scene.kneady_highlight",
+            "value": "OUTLINE"
+          },
+          {
+            "path": "objects[\"Arm\"].kneady.regions[0].tree_open",
+            "value": true
+          },
+          {
+            "path": "window_manager.kneady_row",
+            "value": -1
+          },
+          {
+            "path": "window_manager.kneady_pick",
+            "value": false
+          }
+        ]
+      }
+    },
+    {
+      "title": "Step 2: An Arrow Each Way",
+      "text": [
+        "1. Set Reach's Shape to Quad Arrow.",
+        "2. Set its Size to 2.",
+        "3. Hover the forearm: two double arrows cross at Reach's place, one for each way it moves the hand.",
+        "",
+        "Up / Down runs along one arm and Left / Right along the other; an arm seen end on dims, and takes no drag. A Ring suits a turn; a Box, a scale. Size is this handle's own, against Handle Size at the top of the tab."
+      ],
+      "media": [
+        {
+          "file": "02_quad.mp4",
+          "label": "In the Kneady tab",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "highlight": [
+        "objects[\"Arm\"].kneady.regions[0].buttons[1].handle_shape",
+        "objects[\"Arm\"].kneady.regions[0].buttons[1].handle_size"
+      ],
+      "done_when": [
+        {
+          "path": "objects[\"Arm\"].kneady.regions[0].buttons[1].handle_shape",
+          "is": "CROSS"
+        },
+        {
+          "path": "objects[\"Arm\"].kneady.regions[0].buttons[1].handle_size",
+          "at_least": 1.9
+        },
+        {
+          "hovered": "Forearm",
+          "object": "Arm"
+        }
+      ]
+    },
+    {
+      "title": "Step 3: Drag Along It",
+      "text": [
+        "1. Hover the forearm, then drag one of Reach's arrows along itself: the hand goes the way it points, and follows the mouse.",
+        "",
+        "Drags Prefer Single Direction, on for Reach, keeps the drag to the arm you go along most."
+      ],
+      "media": [
+        {
+          "file": "03_haul.mp4",
+          "label": "On the forearm",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "done_when": [
+        {
+          "operator": "kneady.drag",
+          "with": {
+            "target": "Arm",
+            "region": 1,
+            "button": 1
+          },
+          "moved": true
+        }
+      ]
+    },
+    {
+      "title": "Step 4: Bend on a Ring",
+      "text": [
+        "1. Click FK on the forearm: the arm is in FK, and Bend shows in place of Reach.",
+        "2. In the tree, click Bend, click 3D Handle, and set its Shape to Ring.",
+        "",
+        "A ring lies about the axis its Rotate turns on - here the elbow's."
+      ],
+      "media": [
+        {
+          "file": "04_ring.mp4",
+          "label": "On the forearm, then in the Kneady tab",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "highlight": [
+        "objects[\"Arm\"].kneady.regions[0].buttons[0].handle_shape"
+      ],
+      "done_when": [
+        {
+          "path": "objects[\"Arm\"].kneady.regions[0].buttons[0].handle",
+          "is": "HANDLE"
+        },
+        {
+          "path": "objects[\"Arm\"].kneady.regions[0].buttons[0].handle_shape",
+          "is": "RING"
+        }
+      ]
+    },
+    {
+      "title": "Step 5: Turn It",
+      "text": [
+        "1. Hover the forearm, then drag around Bend's ring: the forearm bends as far as you sweep.",
+        "",
+        "Seen face on, a ring turns by the angle you sweep around its middle; seen edge on, by how far you drag along its rim, as you would turn a wheel."
+      ],
+      "media": [
+        {
+          "file": "05_turn.mp4",
+          "label": "On the forearm",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "done_when": [
+        {
+          "operator": "kneady.drag",
+          "with": {
+            "target": "Arm",
+            "region": 1,
+            "button": 0
+          },
+          "moved": true
+        }
+      ]
+    }
+  ]
+}

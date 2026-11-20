@@ -1,0 +1,84 @@
+{
+  "format": 1,
+  "title": "Getting Started",
+  "summary": "Turn Kneady on, find an object's regions, bend an arm by dragging it, and undo.",
+  "order": 1,
+  "practice": "practice.blend",
+  "steps": [
+    {
+      "title": "Turn Kneady on",
+      "text": [
+        "Kneady lets you pose and shape a model by dragging the model itself. It starts out off in every file.",
+        "Turn it on with the Kneady button in the 3D view's header, or at the top of the sidebar's Kneady tab. It is lit for you there now."
+      ],
+      "media": [
+        {"file": "01_turn_on.mp4", "label": "In the 3D view's header", "paragraph": 1,
+         "show_me": {"sidebar": "Kneady"}}
+      ],
+      "highlight": ["scene.kneady_on"],
+      "done_when": [{"path": "scene.kneady_on", "is": true}],
+      "start": {
+        "mode": "OBJECT",
+        "select": [],
+        "active": "Arm",
+        "set": [{"path": "scene.kneady_on", "value": false}],
+        "view": {"location": [0.0, 0.0, 1.0], "rotation": [0.77455, 0.59433, 0.13176, 0.17171],
+                 "distance": 5.5, "perspective": "PERSP"},
+        "sidebar": "Kneady"
+      }
+    },
+    {
+      "title": "Find the regions",
+      "text": [
+        "Move the mouse over the arm. With Kneady on, hovering an object shows its regions, each in its own color: here the forearm and the upper arm.",
+        "The region under the mouse brightens and shows its buttons. Move from one to the other and the hover follows."
+      ],
+      "media": [
+        {"file": "02_hover.mp4", "label": "In the viewport", "paragraph": 0}
+      ],
+      "start": {
+        "set": [{"path": "scene.kneady_on", "value": true}]
+      }
+    },
+    {
+      "title": "Bend the elbow",
+      "text": [
+        "Press on the forearm and drag up: the elbow bends. Drag down to bend it back, and left or right to swing it.",
+        "Let go to keep the pose. Nothing needs selecting first - a drag goes to the region you pressed on. A click without a drag still selects, as it always has."
+      ],
+      "media": [
+        {"file": "03_bend.mp4", "label": "In the viewport", "paragraph": 0}
+      ],
+      "done_when": [
+        {"path": "objects[\"ArmRig\"].pose.bones[\"Lower\"].rotation_quaternion", "changed": true}
+      ],
+      "start": {
+        "mode": "OBJECT",
+        "set": [
+          {"path": "scene.kneady_on", "value": true},
+          {"path": "objects[\"ArmRig\"].pose.bones[\"Lower\"].rotation_quaternion", "value": [1.0, 0.0, 0.0, 0.0]},
+          {"path": "objects[\"ArmRig\"].pose.bones[\"Upper\"].rotation_quaternion", "value": [1.0, 0.0, 0.0, 0.0]}
+        ]
+      }
+    },
+    {
+      "title": "Undo it",
+      "text": [
+        "Press Ctrl+Z. A drag is one step of undo, like any other edit in Blender, and the elbow goes back to where it was."
+      ],
+      "done_when": [
+        {"path": "objects[\"ArmRig\"].pose.bones[\"Lower\"].rotation_quaternion", "is": [1.0, 0.0, 0.0, 0.0]}
+      ]
+    },
+    {
+      "title": "How much Kneady says",
+      "text": [
+        "Help, beside the Kneady button in the sidebar, sets how much Kneady tells you as you work. Learn shows every key a button takes, Inform what each drag does, and Quiet only the names.",
+        "Help is yours, not the file's: it stays the same in every file you open.",
+        "That's the start. Press Finish to go back to your own file."
+      ],
+      "highlight": ["window_manager.kneady_help"],
+      "start": {"sidebar": "Kneady"}
+    }
+  ]
+}

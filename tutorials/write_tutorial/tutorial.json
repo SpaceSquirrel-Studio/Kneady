@@ -1,0 +1,191 @@
+{
+  "format": 1,
+  "title": "Write a Tutorial",
+  "summary": "Write a tutorial of your own in the Kneady tab: a step, what ticks it off, and Try to play it.",
+  "order": 13,
+  "practice": "../_scenes/cube_region.blend",
+  "steps": [
+    {
+      "title": "Step 1: Turn On Edit Mode",
+      "text": [
+        "1. At the top of the Kneady tab, click the pencil beside Start a Tutorial.",
+        "",
+        "Edit mode is where tutorials are written. Its dropdown holds every tutorial there is, Kneady's own too, to open one and change it."
+      ],
+      "media": [
+        {
+          "file": "01_edit.mp4",
+          "label": "In the Kneady tab",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "highlight": [
+        "window_manager.kneady_tutorial_edit"
+      ],
+      "done_when": [
+        {
+          "path": "window_manager.kneady_tutorial_edit",
+          "is": true
+        }
+      ],
+      "start": {
+        "mode": "OBJECT",
+        "select": [
+          "Cube"
+        ],
+        "active": "Cube",
+        "sidebar": "Kneady",
+        "view": {
+          "location": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation": [
+            0.71238,
+            0.44106,
+            0.28736,
+            0.46412
+          ],
+          "distance": 10.0,
+          "perspective": "PERSP"
+        },
+        "set": [
+          {
+            "path": "scene.kneady_on",
+            "value": true
+          },
+          {
+            "path": "window_manager.kneady_tutorial_edit",
+            "value": false
+          }
+        ]
+      }
+    },
+    {
+      "title": "Step 2: Make One",
+      "text": [
+        "1. Click + beside the dropdown.",
+        "2. In the box that opens, click Title, type Haul the Cube and press Enter, then click OK.",
+        "",
+        "It's made in your tutorials folder - the line under the dropdown says where - with a first step to fill in. The bin beside + deletes the tutorial picked."
+      ],
+      "media": [
+        {
+          "file": "02_new.mp4",
+          "label": "In the Kneady tab",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "done_when": [
+        {
+          "path": "window_manager.kneady_tutorial.id",
+          "changed": true
+        },
+        {
+          "path": "window_manager.kneady_tutorial.steps[0].title",
+          "is": "First step"
+        }
+      ]
+    },
+    {
+      "title": "Step 3: Write Its Step",
+      "text": [
+        "1. Under Steps, First step is picked, its settings under the list. Click its Title, type Haul the Cube and press Enter.",
+        "2. Under Text, click the paragraph, type Haul the cube's top up and down. and press Enter.",
+        "",
+        "Keep a step's paragraphs short: the panel is narrow. The pencil beside one opens it in a wide box, and Media adds a clip or an image."
+      ],
+      "media": [
+        {
+          "file": "03_write.mp4",
+          "label": "In the Kneady tab",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "highlight": [
+        "window_manager.kneady_tutorial.steps[0].title",
+        "window_manager.kneady_tutorial.steps[0].text[0].text"
+      ],
+      "done_when": [
+        {
+          "path": "window_manager.kneady_tutorial.steps[0].title",
+          "is_not": "First step"
+        },
+        {
+          "path": "window_manager.kneady_tutorial.steps[0].text[0].text",
+          "is_not": "Say what to do here."
+        }
+      ]
+    },
+    {
+      "title": "Step 4: Say When It's Done",
+      "text": [
+        "1. Click Done When to open it, then Add Check.",
+        "2. Change Property to Action. In the field under it, type kneady.drag and press Enter, then click Hauled.",
+        "",
+        "The step now ticks itself off when a Kneady button is dragged. The field under kneady.drag can say which one, as {\"target\": \"Cube\"}. A check can also be a property's value, a region hovered, the mode or what is selected."
+      ],
+      "media": [
+        {
+          "file": "04_done.mp4",
+          "label": "In the Kneady tab",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "highlight": [
+        "window_manager.kneady_tutorial.steps[0].checks[0].kind"
+      ],
+      "done_when": [
+        {
+          "path": "window_manager.kneady_tutorial.steps[0].checks[0].kind",
+          "is": "ACTION"
+        },
+        {
+          "path": "window_manager.kneady_tutorial.steps[0].checks[0].operator",
+          "is": "kneady.drag"
+        },
+        {
+          "path": "window_manager.kneady_tutorial.steps[0].checks[0].moved",
+          "is": "HAUL"
+        }
+      ]
+    },
+    {
+      "title": "Step 5: Try It",
+      "text": [
+        "1. Click Try: your tutorial is saved, and plays in this one's place.",
+        "2. Drag the cube's top, and its step ticks off. Finish, at the bottom of the panel, takes you back to your own file, as Return to My File in the Kneady tab does.",
+        "",
+        "Save writes it without playing it. It's listed under Yours in Start a Tutorial. When no tutorial is playing, the panel shows the one you're writing as you type, the eye beside Save hiding it."
+      ],
+      "media": [
+        {
+          "file": "05_try.mp4",
+          "label": "In the Kneady tab, then on the cube",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ]
+    }
+  ]
+}

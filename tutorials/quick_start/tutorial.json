@@ -1,0 +1,131 @@
+{
+  "format": 1,
+  "title": "Quick Start",
+  "summary": "Put a region on the default cube, give it faces, and drag its button to turn the cube.",
+  "order": 1,
+  "practice": "../_scenes/cube.blend",
+  "steps": [
+    {
+      "title": "Step 1: Select an Item",
+      "text": [
+        "Select the item that you want Kneady controls for."
+      ],
+      "media": [
+        {
+          "file": "01_select.mp4",
+          "label": "In the viewport",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "done_when": [
+        {
+          "selected": [
+            "Cube"
+          ]
+        }
+      ],
+      "start": {
+        "mode": "OBJECT",
+        "select": []
+      }
+    },
+    {
+      "title": "Step 2: Create a Region",
+      "text": [
+        "1. Open the N panel.",
+        "2. Navigate to the Kneady tab.",
+        "3. Press the + sign to create a Kneady region.",
+        "",
+        "A mesh item can carry many Kneady regions. You won't see anything until you assign a polygon selection for a region in the next step."
+      ],
+      "media": [
+        {
+          "file": "02_region.mp4",
+          "label": "In the viewport",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "done_when": [
+        {
+          "operator": "kneady.tree_add"
+        }
+      ]
+    },
+    {
+      "title": "Step 3: Give the Region Faces",
+      "text": [
+        "1. Click on \"Edit Faces.\"",
+        "2. Select a polygon.",
+        "3. Click on Assign to add the selection to your currently selected region.",
+        "4. Click Done.",
+        "5. Click Kneady at the top of the panel to turn Kneady on."
+      ],
+      "media": [
+        {
+          "file": "03_assign.mp4",
+          "label": "In the viewport",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "done_when": [
+        {
+          "operator": "kneady.region_edit"
+        },
+        {
+          "operator": "kneady.region_faces"
+        },
+        {
+          "path": "scene.kneady_on",
+          "is": true
+        }
+      ]
+    },
+    {
+      "title": "Step 4: Drag a Button",
+      "text": [
+        "1. Drag left and right on the button.",
+        "2. Drag up and down on the button.",
+        "",
+        "Kneady has automatically assigned the rotation commands. We will select our own commands in the next tutorial, Change the Default Controls."
+      ],
+      "media": [
+        {
+          "file": "04_haul.mp4",
+          "label": "In the viewport",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "done_when": [
+        {
+          "hovered": "Region 1",
+          "object": "Cube"
+        },
+        {
+          "operator": "kneady.drag",
+          "with": {
+            "target": "Cube",
+            "region": 1,
+            "button": 0
+          },
+          "moved": true
+        }
+      ]
+    }
+  ]
+}

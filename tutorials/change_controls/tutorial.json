@@ -1,0 +1,217 @@
+{
+  "format": 1,
+  "title": "Change the Default Controls",
+  "summary": "Give a button your own commands: slide the cube left and right, grow it up and down, at the speed you choose.",
+  "order": 2,
+  "practice": "../_scenes/cube_region.blend",
+  "steps": [
+    {
+      "title": "Step 1: Pick the Button",
+      "text": [
+        "1. In the Kneady tab, click the arrow beside Region 1.",
+        "2. Click Button 1 under it.",
+        "",
+        "Button 1 is the button you dragged in Quick Start. Its settings show under the list."
+      ],
+      "media": [
+        {
+          "file": "01_pick.mp4",
+          "label": "In the Kneady tab",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "done_when": [
+        {
+          "path": "window_manager.kneady_row",
+          "is": 1
+        }
+      ],
+      "start": {
+        "mode": "OBJECT",
+        "select": [
+          "Cube"
+        ],
+        "active": "Cube",
+        "set": [
+          {
+            "path": "scene.kneady_on",
+            "value": true
+          },
+          {
+            "path": "objects[\"Cube\"].kneady.regions[0].tree_open",
+            "value": false
+          },
+          {
+            "path": "window_manager.kneady_row",
+            "value": -1
+          }
+        ],
+        "sidebar": "Kneady",
+        "view": {
+          "location": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation": [
+            0.71238,
+            0.44106,
+            0.28736,
+            0.46412
+          ],
+          "distance": 10.0,
+          "perspective": "PERSP"
+        }
+      }
+    },
+    {
+      "title": "Step 2: Left and Right Slides It",
+      "text": [
+        "1. Under Left / Right, click Rotate Y to open its command.",
+        "2. Set Drives to Move.",
+        "3. Click Y.",
+        "",
+        "Dragging left and right now slides the cube along Y, which runs left to right in this view, instead of turning it."
+      ],
+      "media": [
+        {
+          "file": "02_slide.mp4",
+          "label": "In the Kneady tab",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "highlight": [
+        "objects[\"Cube\"].kneady.regions[0].buttons[0].across.kind"
+      ],
+      "done_when": [
+        {
+          "path": "objects[\"Cube\"].kneady.regions[0].buttons[0].across.kind",
+          "is": "MOVE"
+        },
+        {
+          "path": "objects[\"Cube\"].kneady.regions[0].buttons[0].across.axis",
+          "is": "Y"
+        }
+      ]
+    },
+    {
+      "title": "Step 3: Up and Down Grows It",
+      "text": [
+        "1. Under Up / Down, click Rotate X to open its command.",
+        "2. Set Drives to Scale.",
+        "3. Click All.",
+        "",
+        "Dragging up grows the cube on all three axes; dragging down shrinks it."
+      ],
+      "media": [
+        {
+          "file": "03_grow.mp4",
+          "label": "In the Kneady tab",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "highlight": [
+        "objects[\"Cube\"].kneady.regions[0].buttons[0].up.kind"
+      ],
+      "done_when": [
+        {
+          "path": "objects[\"Cube\"].kneady.regions[0].buttons[0].up.kind",
+          "is": "SCALE"
+        },
+        {
+          "path": "objects[\"Cube\"].kneady.regions[0].buttons[0].up.axis",
+          "is": "ALL"
+        }
+      ]
+    },
+    {
+      "title": "Step 4: Choose Its Speed",
+      "text": [
+        "1. Click Up / Down's Speed.",
+        "2. Type 0.1 and press Enter.",
+        "",
+        "Speed is how far a drag of 100 pixels takes it. At 0.1 the cube grows by about a tenth, so it's easier to stop where you want."
+      ],
+      "media": [
+        {
+          "file": "04_speed.mp4",
+          "label": "In the Kneady tab",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "highlight": [
+        "objects[\"Cube\"].kneady.regions[0].buttons[0].up.rate"
+      ],
+      "done_when": [
+        {
+          "path": "objects[\"Cube\"].kneady.regions[0].buttons[0].up.rate",
+          "at_most": 0.15
+        }
+      ]
+    },
+    {
+      "title": "Step 5: Try It",
+      "text": [
+        "1. Hover over the cube's top and drag its button left and right: the cube slides.",
+        "2. Drag it up and down: the cube grows and shrinks.",
+        "",
+        "Ctrl+Z puts it back, a drag at a time."
+      ],
+      "media": [
+        {
+          "file": "05_try.mp4",
+          "label": "In the viewport",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "done_when": [
+        {
+          "operator": "kneady.drag",
+          "with": {
+            "target": "Cube",
+            "region": 1,
+            "button": 0
+          },
+          "moved": true
+        }
+      ],
+      "start": {
+        "view": {
+          "location": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation": [
+            0.71238,
+            0.44106,
+            0.28736,
+            0.46412
+          ],
+          "distance": 10.0,
+          "perspective": "PERSP"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "format": 1,
+  "title": "Demo of the Player",
+  "summary": "For the tests and the window probe: clips, an image, one not recorded, a shared set, enough text to scroll.",
+  "order": 99,
+  "playlist": "https://www.youtube.com/playlist?list=PLkneadyDemoKneadyDemoKneadyDemoKn",
+  "media": [
+    {"file": "counting.mp4", "label": "Shared: the counting clip", "paragraph": 0},
+    {"file": "still.png", "label": "Shared: an image", "paragraph": 1, "seconds": 2}
+  ],
+  "steps": [
+    {
+      "title": "A step's own media",
+      "text": [
+        "The first clip counts frames: 240 of them, 24 a second, a color each.",
+        "The second is the same clip again, its paragraph this one, held on its last frame at its end. Breadcrumbs read like this: Properties > Modifiers > Kneady > Speed.",
+        "The third is not recorded, so the panel says so in its place, with a button to watch it online.",
+        "The fourth is an image, held for its seconds before the next. A paragraph long enough to scroll: the wheel over the text scrolls it, and Follow Video brings each item's paragraph back into view as it changes."
+      ],
+      "media": [
+        {"file": "counting.mp4", "label": "In the viewport", "paragraph": 0},
+        {"file": "counting.mp4", "label": "Properties > Modifiers", "paragraph": 1, "hold": true,
+         "show_me": {"properties": "MODIFIER"}},
+        {"file": "not_recorded.mp4", "label": "In the viewport", "paragraph": 2,
+         "watch": "https://www.youtube.com/shorts/example"},
+        {"file": "still.png", "label": "An image", "paragraph": 3, "seconds": 2}
+      ],
+      "highlight": ["scene.kneady_on"],
+      "done_when": [{"path": "scene.kneady_on", "is": true}],
+      "start": {"set": [{"path": "scene.kneady_on", "value": false}]}
+    },
+    {
+      "title": "No media",
+      "text": ["A step with text alone: no clip, no controls under it."],
+      "media": []
+    },
+    {
+      "title": "The shared set",
+      "text": ["This step has no media of its own, so it shows the tutorial's shared set.", "Its second item lights this paragraph."]
+    },
+    {
+      "title": "The shared set, still playing",
+      "text": ["Coming here from the step before, the shared clip plays on where it was."]
+    }
+  ]
+}

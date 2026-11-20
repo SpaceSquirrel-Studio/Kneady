@@ -1,0 +1,178 @@
+{
+  "format": 1,
+  "title": "Tips for Your Buttons",
+  "summary": "Read a button's tip, say what its drag does in your own words, add a message, and choose how much Kneady says.",
+  "order": 12,
+  "practice": "../_scenes/mannequin_reused.blend",
+  "steps": [
+    {
+      "title": "Step 1: Read Turn's Tip",
+      "text": [
+        "1. Rest the mouse on Turn on the mannequin's head. After half a second its tip shows under its name.",
+        "2. In the tree, click the arrow beside Head, then click Turn.",
+        "3. At the end of Turn's settings, click Tip to open it.",
+        "",
+        "A tip has a row per key: the key on the left, what it does on the right. Kneady writes both from the button's commands, so a tip stays true when they change. The rows under Tip are the tip's own."
+      ],
+      "media": [
+        {
+          "file": "01_read.mp4",
+          "label": "On the head, then in the Kneady tab",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "done_when": [
+        {
+          "path": "objects[\"Mannequin\"].kneady.regions[0].buttons[2].tip_open",
+          "is": true
+        }
+      ],
+      "start": {
+        "mode": "OBJECT",
+        "select": [
+          "Mannequin"
+        ],
+        "active": "Mannequin",
+        "sidebar": "Kneady",
+        "view": {
+          "location": [
+            0.0,
+            0.0,
+            1.74
+          ],
+          "rotation": [
+            0.74324,
+            0.64609,
+            0.11392,
+            0.13105
+          ],
+          "distance": 0.9,
+          "perspective": "PERSP"
+        },
+        "set": [
+          {
+            "path": "scene.kneady_on",
+            "value": true
+          },
+          {
+            "path": "scene.kneady_labels",
+            "value": "ALWAYS"
+          },
+          {
+            "path": "scene.kneady_highlight",
+            "value": "OUTLINE"
+          },
+          {
+            "path": "objects[\"Mannequin\"].kneady.regions[0].tree_open",
+            "value": false
+          },
+          {
+            "path": "objects[\"Mannequin\"].kneady.regions[1].tree_open",
+            "value": false
+          },
+          {
+            "path": "objects[\"Mannequin\"].kneady.regions[2].tree_open",
+            "value": false
+          },
+          {
+            "path": "objects[\"Mannequin\"].kneady.regions[0].buttons[2].tip_open",
+            "value": false
+          },
+          {
+            "path": "window_manager.kneady_row",
+            "value": -1
+          },
+          {
+            "path": "window_manager.kneady_pick",
+            "value": false
+          }
+        ]
+      }
+    },
+    {
+      "title": "Step 2: Say It Your Way",
+      "text": [
+        "1. In the Drag ↔ row, click the field holding Kneady's words in grey, type Turn the head and press Enter.",
+        "2. Rest the mouse on Turn: its tip says yours.",
+        "",
+        "Your words stay with the row - the left and right drag - not its place, so they keep if the commands change, and the status bar says them too. Clear the field to go back to Kneady's. The eye beside a row hides it from the tip."
+      ],
+      "media": [
+        {
+          "file": "02_words.mp4",
+          "label": "In the Kneady tab, then on the head",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "done_when": [
+        {
+          "path": "objects[\"Mannequin\"].kneady.regions[0].buttons[2].tip_rows[0].text",
+          "is_not": ""
+        }
+      ]
+    },
+    {
+      "title": "Step 3: Add a Message",
+      "text": [
+        "1. Click the field under the rows, type Looks left and right. and press Enter.",
+        "2. Rest the mouse on Turn: the message shows under a line.",
+        "",
+        "The rows say what the keys do; the message says what the button is for. A copied button takes its tip with it."
+      ],
+      "media": [
+        {
+          "file": "03_message.mp4",
+          "label": "In the Kneady tab, then on the head",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "done_when": [
+        {
+          "path": "objects[\"Mannequin\"].kneady.regions[0].buttons[2].tip_text",
+          "is_not": ""
+        }
+      ]
+    },
+    {
+      "title": "Step 4: How Much Kneady Says",
+      "text": [
+        "1. At the top of the Kneady tab, set Help to Inform.",
+        "2. Rest the mouse on Turn: its tip shows your drag row and your message, and leaves out Ctrl and Shift.",
+        "",
+        "Learn shows every key; Inform leaves the keys every button shares to the status bar; Quiet shows no tips. Help is yours, not the file's: it follows you into every file. Set it back to Learn for the tutorials."
+      ],
+      "media": [
+        {
+          "file": "04_help.mp4",
+          "label": "In the Kneady tab, then on the head",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "highlight": [
+        "window_manager.kneady_help"
+      ],
+      "done_when": [
+        {
+          "path": "window_manager.kneady_help",
+          "is": "INFORM"
+        }
+      ]
+    }
+  ]
+}

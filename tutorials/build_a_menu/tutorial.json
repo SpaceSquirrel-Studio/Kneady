@@ -1,0 +1,260 @@
+{
+  "format": 1,
+  "title": "Build a Menu",
+  "summary": "Give a button a menu, add buttons to it, name them, and choose how they look.",
+  "order": 4,
+  "practice": "../_scenes/shape_cube_controls.blend",
+  "steps": [
+    {
+      "title": "Step 1: Pick the Button",
+      "text": [
+        "1. In the Kneady tab, click the arrow beside Region 1.",
+        "2. Click Button 1 under it.",
+        "",
+        "Button 1 rounds and twists the cube, as you left it. A button can also open a menu of more buttons, in a ring around it: you build it here."
+      ],
+      "media": [
+        {
+          "file": "01_pick.mp4",
+          "label": "In the Kneady tab",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "done_when": [
+        {
+          "path": "window_manager.kneady_row",
+          "is": 1
+        }
+      ],
+      "start": {
+        "mode": "OBJECT",
+        "select": [
+          "Cube"
+        ],
+        "active": "Cube",
+        "sidebar": "Kneady",
+        "view": {
+          "location": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation": [
+            0.71238,
+            0.44106,
+            0.28736,
+            0.46412
+          ],
+          "distance": 10.0,
+          "perspective": "PERSP"
+        },
+        "set": [
+          {
+            "path": "scene.kneady_on",
+            "value": true
+          },
+          {
+            "path": "objects[\"Cube\"].kneady.regions[0].tree_open",
+            "value": false
+          },
+          {
+            "path": "window_manager.kneady_row",
+            "value": -1
+          }
+        ]
+      }
+    },
+    {
+      "title": "Step 2: Give It a Menu",
+      "text": [
+        "1. At the bottom of Button 1's settings, turn on Opens Menu.",
+        "",
+        "Now a click on Button 1 opens its menu. A drag still rounds and twists the cube."
+      ],
+      "media": [
+        {
+          "file": "02_opens_menu.mp4",
+          "label": "In the Kneady tab",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "highlight": [
+        "objects[\"Cube\"].kneady.regions[0].buttons[0].opens_menu"
+      ],
+      "done_when": [
+        {
+          "path": "objects[\"Cube\"].kneady.regions[0].buttons[0].opens_menu",
+          "is": true
+        }
+      ]
+    },
+    {
+      "title": "Step 3: Add Buttons to It",
+      "text": [
+        "1. Press Add to Its Menu. The new button shows in the tree under Button 1, and is picked.",
+        "2. Click Button 1 again and press Add to Its Menu once more."
+      ],
+      "media": [
+        {
+          "file": "03_add.mp4",
+          "label": "In the Kneady tab",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "done_when": [
+        {
+          "path": "objects[\"Cube\"].kneady.regions[0].button_count",
+          "at_least": 3
+        }
+      ]
+    },
+    {
+      "title": "Step 4: Name Them",
+      "text": [
+        "1. Double-click the first new button's name in the tree (or Ctrl+click it), type Round and press Enter.",
+        "2. Name the other one Twist the same way."
+      ],
+      "media": [
+        {
+          "file": "04_name.mp4",
+          "label": "In the Kneady tab",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "done_when": [
+        {
+          "path": "objects[\"Cube\"].kneady.regions[0].buttons[1].name",
+          "is": "Round"
+        },
+        {
+          "path": "objects[\"Cube\"].kneady.regions[0].buttons[2].name",
+          "is": "Twist"
+        }
+      ]
+    },
+    {
+      "title": "Step 5: Show Their Names",
+      "text": [
+        "1. Click Round in the tree and set its Icon to Text.",
+        "2. Do the same for Twist.",
+        "",
+        "A text button shows its name instead of arrows."
+      ],
+      "media": [
+        {
+          "file": "05_text.mp4",
+          "label": "In the Kneady tab",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "done_when": [
+        {
+          "path": "objects[\"Cube\"].kneady.regions[0].buttons[1].icon_type",
+          "is": "TEXT"
+        },
+        {
+          "path": "objects[\"Cube\"].kneady.regions[0].buttons[2].icon_type",
+          "is": "TEXT"
+        }
+      ]
+    },
+    {
+      "title": "Step 6: One Color for the Menu",
+      "text": [
+        "1. Click Button 1 in the tree.",
+        "2. Under Opens Menu, turn on Override Color.",
+        "3. Click the swatch beside it and pick a color.",
+        "",
+        "Every button in the menu takes that one color."
+      ],
+      "media": [
+        {
+          "file": "06_color.mp4",
+          "label": "In the Kneady tab",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "highlight": [
+        "objects[\"Cube\"].kneady.regions[0].buttons[0].menu_use_color"
+      ],
+      "done_when": [
+        {
+          "path": "objects[\"Cube\"].kneady.regions[0].buttons[0].menu_use_color",
+          "is": true
+        }
+      ]
+    },
+    {
+      "title": "Step 7: Open It",
+      "text": [
+        "1. Move the mouse over the cube and click Button 1: its menu opens, Round and Twist around it.",
+        "2. Press Esc to close it.",
+        "",
+        "Round and Twist do nothing yet: give each a drag in its settings, as in the tutorials before."
+      ],
+      "media": [
+        {
+          "file": "07_open.mp4",
+          "label": "In the viewport",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "done_when": [
+        {
+          "operator": "kneady.drag",
+          "with": {
+            "target": "Cube",
+            "region": 1,
+            "button": 0
+          },
+          "moved": false
+        }
+      ],
+      "start": {
+        "view": {
+          "location": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation": [
+            0.71238,
+            0.44106,
+            0.28736,
+            0.46412
+          ],
+          "distance": 10.0,
+          "perspective": "PERSP"
+        }
+      }
+    }
+  ]
+}

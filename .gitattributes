@@ -1,0 +1,13 @@
+# Shell scripts keep Unix line endings on every checkout and in every archive:
+# bash on Linux and macOS fails on Windows line endings
+*.sh text eol=lf
+
+# Blender files and images are binary
+*.blend binary
+*.png binary
+*.mp4 binary
+
+# The shipped tutorials' clips live in Git LFS, so each re-recording does not
+# grow the repository. The tests only check that each clip is there, so they
+# run without them (.github/workflows/tests.yml checks out without LFS).
+tutorials/**/*.mp4 filter=lfs diff=lfs merge=lfs -text

@@ -1,0 +1,272 @@
+{
+  "format": 1,
+  "title": "Copy and Reuse",
+  "summary": "Copy one button's commands onto another, tuck a button into a menu, and give a region another region's buttons.",
+  "order": 11,
+  "practice": "../_scenes/mannequin_edited.blend",
+  "steps": [
+    {
+      "title": "Step 1: Copy Turn's Commands onto Tilt",
+      "text": [
+        "1. Right-click Turn on the mannequin's head, and click Copy Commands.",
+        "2. Right-click Tilt, and click Paste Commands.",
+        "",
+        "The mannequin is as Viewport Edit left it, in Viewport Edit, with a Hips region added. Tilt now drives what Turn does - the head's turn, at the same speed. Paste Commands copies only what a button drives: Tilt keeps its own name, look and place."
+      ],
+      "media": [
+        {
+          "file": "01_copy.mp4",
+          "label": "On the head",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "done_when": [
+        {
+          "path": "objects[\"Mannequin\"].kneady.regions[0].buttons[1].across.enabled",
+          "is": true
+        },
+        {
+          "path": "objects[\"Mannequin\"].kneady.regions[0].buttons[1].across.bone",
+          "is": "head"
+        }
+      ],
+      "start": {
+        "mode": "OBJECT",
+        "select": [
+          "Mannequin"
+        ],
+        "active": "Mannequin",
+        "sidebar": "Kneady",
+        "view": {
+          "location": [
+            0.0,
+            0.0,
+            1.45
+          ],
+          "rotation": [
+            0.74324,
+            0.64609,
+            0.11392,
+            0.13105
+          ],
+          "distance": 1.6,
+          "perspective": "PERSP"
+        },
+        "set": [
+          {
+            "path": "scene.kneady_on",
+            "value": true
+          },
+          {
+            "path": "scene.kneady_labels",
+            "value": "ALWAYS"
+          },
+          {
+            "path": "scene.kneady_highlight",
+            "value": "OUTLINE"
+          },
+          {
+            "path": "objects[\"Mannequin\"].kneady.regions[0].tree_open",
+            "value": false
+          },
+          {
+            "path": "objects[\"Mannequin\"].kneady.regions[1].tree_open",
+            "value": false
+          },
+          {
+            "path": "objects[\"Mannequin\"].kneady.regions[2].tree_open",
+            "value": false
+          },
+          {
+            "path": "window_manager.kneady_row",
+            "value": -1
+          },
+          {
+            "path": "window_manager.kneady_pick",
+            "value": true
+          },
+          {
+            "path": "window_manager.kneady_arrange",
+            "value": false
+          }
+        ]
+      }
+    },
+    {
+      "title": "Step 2: Make It Tilt",
+      "text": [
+        "1. Tilt's settings show under the tree. Under Left / Right, click Rotate Y on head to open its command.",
+        "2. Click Z.",
+        "3. Drag Tilt left and right: the head tilts to the side.",
+        "",
+        "The head's Z points out of its face, so a turn about it tilts the head. Only what differs from Turn needed changing."
+      ],
+      "media": [
+        {
+          "file": "02_tilt.mp4",
+          "label": "In the Kneady tab, then on the head",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "done_when": [
+        {
+          "path": "objects[\"Mannequin\"].kneady.regions[0].buttons[1].across.axis",
+          "is": "Z"
+        },
+        {
+          "operator": "kneady.drag",
+          "with": {
+            "target": "Mannequin",
+            "region": 1,
+            "button": 1
+          },
+          "moved": true
+        }
+      ],
+      "start": {
+        "set": [
+          {
+            "path": "window_manager.kneady_pick",
+            "value": true
+          }
+        ]
+      }
+    },
+    {
+      "title": "Step 3: Tuck Tilt into Nod's Menu",
+      "text": [
+        "1. Click Nod, and in its settings tick Opens Menu.",
+        "2. Right-click Tilt, point at Move To, and click In Nod.",
+        "3. Click Nod: its menu opens, with Tilt in it.",
+        "",
+        "A button can drag and open a menu at once: dragging Nod still nods, and a click shows the rest. Move To sends a button, with any menu of its own, into a menu or back to the region's own buttons - for the ones you use less."
+      ],
+      "media": [
+        {
+          "file": "03_move.mp4",
+          "label": "In the Kneady tab, then on the head",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "highlight": [
+        "objects[\"Mannequin\"].kneady.regions[0].buttons[0].opens_menu"
+      ],
+      "done_when": [
+        {
+          "path": "objects[\"Mannequin\"].kneady.regions[0].buttons[0].opens_menu",
+          "is": true
+        },
+        {
+          "path": "objects[\"Mannequin\"].kneady.regions[0].buttons[1].menu_parent",
+          "at_least": 1
+        }
+      ],
+      "start": {
+        "set": [
+          {
+            "path": "window_manager.kneady_pick",
+            "value": true
+          }
+        ]
+      }
+    },
+    {
+      "title": "Step 4: Give the Hips the Chest's Buttons",
+      "text": [
+        "1. Right-click the chest, away from its buttons, and click Copy All Buttons.",
+        "2. Right-click the hips, and click Paste All Buttons.",
+        "",
+        "The hips take Bend and Twist, arranged as the chest's were, in place of their own; they keep their own name, faces and color. The copy is on the system clipboard, so it pastes into another file too."
+      ],
+      "media": [
+        {
+          "file": "04_copy_all.mp4",
+          "label": "On the chest, then the hips",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "done_when": [
+        {
+          "path": "objects[\"Mannequin\"].kneady.regions[2].buttons[0].name",
+          "is": "Bend"
+        },
+        {
+          "path": "objects[\"Mannequin\"].kneady.regions[2].buttons[1].name",
+          "is": "Twist"
+        }
+      ],
+      "start": {
+        "set": [
+          {
+            "path": "window_manager.kneady_pick",
+            "value": true
+          }
+        ]
+      }
+    },
+    {
+      "title": "Step 5: Point Them at the Hips",
+      "text": [
+        "1. Click Bend on the hips. Under Up / Down, click Rotate X on chest to open its command, click Bone, type hips and press Enter.",
+        "2. Click Twist on the hips, and do the same under Left / Right.",
+        "3. Drag Bend on the hips: they bend.",
+        "",
+        "A copy keeps what it drives - bones by name, even pasted into another file - so the hips' buttons turned the chest until you changed what differs. Click Viewport Edit again when you're done."
+      ],
+      "media": [
+        {
+          "file": "05_hips.mp4",
+          "label": "On the hips, and in the Kneady tab",
+          "paragraph": 0,
+          "recorded": {
+            "blender": "5.2",
+            "kneady": "1.0.0"
+          }
+        }
+      ],
+      "done_when": [
+        {
+          "path": "objects[\"Mannequin\"].kneady.regions[2].buttons[0].up.bone",
+          "is": "hips"
+        },
+        {
+          "path": "objects[\"Mannequin\"].kneady.regions[2].buttons[1].across.bone",
+          "is": "hips"
+        },
+        {
+          "operator": "kneady.drag",
+          "with": {
+            "target": "Mannequin",
+            "region": 3,
+            "button": 0
+          },
+          "moved": true
+        }
+      ],
+      "start": {
+        "set": [
+          {
+            "path": "window_manager.kneady_pick",
+            "value": true
+          }
+        ]
+      }
+    }
+  ]
+}
