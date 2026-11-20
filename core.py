@@ -260,15 +260,23 @@ def _view_of(context):
     return space if getattr(space, "type", "") == "VIEW_3D" else None
 
 
-def shown_in(obj, context):
+def shown_in(obj, context, depsgraph=None):
     """Whether `obj` can be seen where `context` is: visible in the view layer
     and, in a 3D view, in that view too - Local View (Numpad /) and a view's
     own collection visibility hide objects that are still visible to the
-    view layer, and Blender's scene ray cast knows nothing of either."""
+    view layer, and Blender's scene ray cast knows nothing of either.
+
+    The view's own visibility is asked of the evaluated object. Blender 4.2
+    and 4.5 keep it only there: asked of the original, they answered "not in
+    this view" for every object, the ones in Local View included, so nothing
+    could be hovered in Local View at all (5.3 answers either way)."""
     if not obj.visible_get():
         return False
     space = _view_of(context)
-    return space is None or obj.visible_in_viewport_get(space)
+    if space is None:
+        return True
+    depsgraph = depsgraph or context.evaluated_depsgraph_get()
+    return obj.evaluated_get(depsgraph).visible_in_viewport_get(space)
 
 
 def objects_with_regions(context):
@@ -291,7 +299,7 @@ def ray(context, origin, direction, distance=None, depsgraph=None, tries=16):
     start = origin.copy()
     for _k in range(tries):
         ok, point, _normal, _face, obj, _matrix = found
-        if not ok or obj is None or shown_in(obj.original, context):
+        if not ok or obj is None or shown_in(obj.original, context, depsgraph):
             return found
         # just past the hidden surface: far enough to leave it behind, near
         # enough not to step over a thin object right behind it

@@ -62,8 +62,11 @@ def steps():
     yield 0.5
     space = area.spaces.active
     w.check("in_local_view", space.local_view is not None)
-    w.check("wall_and_ghost_hidden_here", not bpy.data.objects["Wall"].visible_in_viewport_get(space)
-            and not ghost.visible_in_viewport_get(space))
+    # asked of the evaluated objects: Blender 4.2 and 4.5 answer "not in this
+    # view" for every original object (core.shown_in)
+    dg = bpy.context.evaluated_depsgraph_get()
+    seen = {o.name: o.evaluated_get(dg).visible_in_viewport_get(space) for o in bpy.data.objects}
+    w.check("only_the_character_shown_here", seen == {"Character": True, "Wall": False, "Ghost": False}, str(seen))
     yield from w.hover_point(win, Vector((0.0, -1.0, 0.0)))
     hover = core.STATE["hover"]
     w.check("character_hovered_past_the_hidden_wall", bool(hover) and hover[0] == "Character", str(hover))
