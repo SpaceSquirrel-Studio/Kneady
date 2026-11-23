@@ -42,6 +42,10 @@ jobs:
       run:
         # Git Bash on Windows, so every step is written once
         shell: bash
+    env:
+      # the Mesa release Windows draws with, and its processor driver
+      MESA: "26.3.1"
+      GALLIUM_DRIVER: llvmpipe
     steps:
       - name: Check out Kneady (without the clips in LFS)
         uses: actions/checkout@v4
@@ -66,6 +70,9 @@ jobs:
             | sed -E "s/blender-$escaped\.([0-9]+)-.*/\1/" | sort -n | tail -1)
           if [ -z "$patch" ]; then echo "No $kind download for Blender $v"; exit 1; fi
           name="blender-$v.$patch-$kind"
+          # what is kept between runs: Blender, and on Windows the Mesa beside it
+          key="$name"; [ "$RUNNER_OS" = Windows ] && key="$name-mesa-$MESA"
+          echo "key=$key" >> "$GITHUB_OUTPUT"
           echo "name=$name" >> "$GITHUB_OUTPUT"
           echo "file=$name.$ext" >> "$GITHUB_OUTPUT"
           echo "url=https://download.blender.org/release/Blender$v/$name.$ext" >> "$GITHUB_OUTPUT"
@@ -75,7 +82,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/blender
-          key: ${{ steps.blender.outputs.name }}
+          key: ${{ steps.blender.outputs.key }}
 
       - name: Download Blender
         run: |
@@ -98,6 +105,25 @@ jobs:
                 mv ~/download/zip/blender-*/* ~/blender/ ;;
             esac
           fi
+
+      # The tutorial tests show a clip's frames, and a frame is drawn by the
+      # graphics card. GitHub's Windows machines have none Blender can use:
+      # the first run (23 November 2026) crashed both Windows jobs at the
+      # first clip (EXCEPTION_ACCESS_VIOLATION, after "Unable to initialize
+      # a Vulkan 1.1 instance"). Linux has Mesa, which draws on the
+      # processor; Mesa's Windows build (github.com/pal1000/mesa-dist-win),
+      # put beside blender.exe, is found before Windows' own OpenGL.
+      - name: Give Windows an OpenGL that draws on the processor (Mesa)
+        if: runner.os == 'Windows'
+        run: |
+          if [ ! -e ~/blender/opengl32.dll ]; then
+            mkdir -p ~/download
+            curl -fsSL -o ~/download/mesa.7z \
+              "https://github.com/pal1000/mesa-dist-win/releases/download/$MESA/mesa3d-$MESA-release-msvc.7z"
+            7z e -y -o"$(cygpath -w ~/blender)" "$(cygpath -w ~/download/mesa.7z)" \
+              x64/opengl32.dll x64/libgallium_wgl.dll > /dev/null
+          fi
+          ls -l ~/blender/opengl32.dll ~/blender/libgallium_wgl.dll
 
       - name: Install the libraries Blender loads
         if: runner.os == 'Linux'
