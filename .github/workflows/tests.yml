@@ -1,7 +1,14 @@
 # Kneady's tests on every push and pull request, in Blender 4.2 LTS (the
-# oldest Kneady supports) and the newest release. They run in the background,
-# so they cover everything but what needs a window (tests/probe_*.py), which
-# is run by hand before a release.
+# oldest Kneady supports) and the newest release, on Linux, macOS and
+# Windows. They run in the background, so they cover everything but what
+# needs a window (tests/probe_*.py), which is run by hand before a release.
+#
+# Greg, 23 November 2026, after the Linux-only runs: "Can we run tests now via
+# github? Seems like that would be very informative". The other two systems
+# are where file paths, case-sensitive names and the Windows-only code (the
+# Recycle Bin, OBS's file check) take a different road. While the repository
+# is private a macOS minute counts as about ten of the included minutes; once
+# it is public, GitHub's standard runners are free.
 #
 # Two things they do without, on purpose:
 # - The tutorial clips, kept in Git LFS. The tests check that each clip is
@@ -23,12 +30,18 @@ on:
 
 jobs:
   tests:
-    name: Blender ${{ matrix.blender }}
-    runs-on: ubuntu-latest
+    name: ${{ matrix.os }} Blender ${{ matrix.blender }}
+    runs-on: ${{ matrix.os }}
     strategy:
+      # one system failing never stops the others: each is its own answer
       fail-fast: false
       matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
         blender: ["4.2", "5.3"]
+    defaults:
+      run:
+        # Git Bash on Windows, so every step is written once
+        shell: bash
     steps:
       - name: Check out Kneady (without the clips in LFS)
         uses: actions/checkout@v4
@@ -40,14 +53,23 @@ jobs:
       - name: Find the newest Blender ${{ matrix.blender }}
         id: blender
         run: |
+          # each system's download, and where Blender's program sits inside it
+          case "$RUNNER_OS" in
+            Linux)   kind="linux-x64";   ext="tar.xz"; exe="blender" ;;
+            macOS)   kind="macos-arm64"; ext="dmg";    exe="Blender.app/Contents/MacOS/Blender" ;;
+            Windows) kind="windows-x64"; ext="zip";    exe="blender.exe" ;;
+          esac
           v="${{ matrix.blender }}"
           escaped="${v//./\\.}"
           patch=$(curl -fsSL "https://download.blender.org/release/Blender$v/" \
-            | grep -oE "blender-$escaped\.[0-9]+-linux-x64\.tar\.xz" \
+            | grep -oE "blender-$escaped\.[0-9]+-$kind\.${ext//./\\.}" \
             | sed -E "s/blender-$escaped\.([0-9]+)-.*/\1/" | sort -n | tail -1)
-          if [ -z "$patch" ]; then echo "No Linux download for Blender $v"; exit 1; fi
-          echo "name=blender-$v.$patch-linux-x64" >> "$GITHUB_OUTPUT"
-          echo "url=https://download.blender.org/release/Blender$v/blender-$v.$patch-linux-x64.tar.xz" >> "$GITHUB_OUTPUT"
+          if [ -z "$patch" ]; then echo "No $kind download for Blender $v"; exit 1; fi
+          name="blender-$v.$patch-$kind"
+          echo "name=$name" >> "$GITHUB_OUTPUT"
+          echo "file=$name.$ext" >> "$GITHUB_OUTPUT"
+          echo "url=https://download.blender.org/release/Blender$v/$name.$ext" >> "$GITHUB_OUTPUT"
+          echo "exe=$exe" >> "$GITHUB_OUTPUT"
 
       - name: Keep Blender between runs
         uses: actions/cache@v4
@@ -57,16 +79,32 @@ jobs:
 
       - name: Download Blender
         run: |
-          if [ ! -x ~/blender/blender ]; then
-            mkdir -p ~/blender
-            curl -fsSL "${{ steps.blender.outputs.url }}" | tar -xJ -C ~/blender --strip-components=1
+          if [ ! -e ~/blender/"${{ steps.blender.outputs.exe }}" ]; then
+            mkdir -p ~/blender ~/download
+            file=~/download/"${{ steps.blender.outputs.file }}"
+            curl -fsSL -o "$file" "${{ steps.blender.outputs.url }}"
+            case "$RUNNER_OS" in
+              Linux)
+                tar -xJf "$file" -C ~/blender --strip-components=1 ;;
+              macOS)
+                # a disk image: mount it, copy the app out, let it go
+                hdiutil attach -nobrowse -readonly -mountpoint ~/download/dmg "$file"
+                cp -R ~/download/dmg/Blender.app ~/blender/
+                hdiutil detach ~/download/dmg ;;
+              Windows)
+                # 7-Zip comes with GitHub's Windows machines; it is a Windows
+                # program, so it is handed Windows paths (cygpath -w)
+                7z x -y -o"$(cygpath -w ~/download/zip)" "$(cygpath -w "$file")" > /dev/null
+                mv ~/download/zip/blender-*/* ~/blender/ ;;
+            esac
           fi
 
       - name: Install the libraries Blender loads
+        if: runner.os == 'Linux'
         run: |
           sudo apt-get update
           sudo apt-get install -y libxi6 libxxf86vm1 libxfixes3 libxrender1 libgl1 libegl1 libxkbcommon0 libsm6
 
       - name: Run the tests
         working-directory: Kneady
-        run: ~/blender/blender --background --factory-startup --python tests/run.py
+        run: ~/blender/"${{ steps.blender.outputs.exe }}" --background --factory-startup --python tests/run.py
