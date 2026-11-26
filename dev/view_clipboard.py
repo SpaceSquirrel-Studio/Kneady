@@ -23,7 +23,7 @@ from mathutils import Quaternion
 
 bl_info = {
     "name": "View Clipboard",
-    "author": "Space Squirrel Studio",
+    "author": "Tangentsmith",
     "version": (1, 0, 0),
     "blender": (4, 2, 0),
     "location": "3D Viewport > View > Copy View / Paste View",

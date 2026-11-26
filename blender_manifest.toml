@@ -7,7 +7,7 @@ tagline = "Pose and shape anything by dragging its own surface"
 maintainer = "Greg Brown"
 type = "add-on"
 
-website = "https://github.com/SpaceSquirrel-Studio/Kneady"
+website = "https://github.com/Tangentsmith/Kneady"
 
 tags = ["Animation", "Rigging", "3D View"]
 
